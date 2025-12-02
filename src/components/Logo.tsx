@@ -7,17 +7,18 @@ interface LogoProps {
 export function Logo({ className }: LogoProps) {
   return (
     <svg
-      viewBox="0 0 91 115"
+      viewBox="0 0 87 92"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       className={cn("h-auto w-auto", className)}
       aria-hidden="true"
     >
       <path
-        d="M83.3477 57.5L45.5 105.33L7.65137 57.5L45.5 9.66895L83.3477 57.5Z"
+        d="M78.0537 46L43.5 82.54L8.94531 46L43.5 9.45898L78.0537 46Z"
         stroke="currentColor"
-        strokeWidth="12"
-        strokeLinejoin="miter"
+        // Reduzi de 13 para 4.
+        // Como o SVG tem 92px de altura, um traço de 4 resulta numa linha visual de ~2px quando o logo é pequeno.
+        strokeWidth="8"
       />
     </svg>
   );

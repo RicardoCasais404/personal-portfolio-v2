@@ -1,15 +1,20 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
+import { Navbar } from "@/components/Navbar";
 import { cn } from "@/lib/utils";
-import { Navbar } from "@/components/Navbar"; // <--- Importação nova
 
-const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
+// 1. CONFIGURAÇÃO DA FONTE
+const myFont = localFont({
+  src: "../fonts/font.ttf",
+  variable: "--font-main",
+  display: "swap",
+  // Se a fonte for variável, não definas weight. Se for estática, define o weight.
+});
 
 export const metadata: Metadata = {
   title: "Ricardo Casais | Full Stack Developer",
-  description:
-    "Portfólio de Ricardo Casais, Full-Stack Developer focado em interfaces modernas e animadas.",
+  description: "Portfólio de Ricardo Casais.",
 };
 
 export default function RootLayout({
@@ -21,12 +26,18 @@ export default function RootLayout({
     <html lang="en" className="scroll-smooth">
       <body
         className={cn(
-          "min-h-screen bg-[#d9d9d9] font-sans text-[#26150f] antialiased",
-          inter.variable
+          // 1. Base Tailwind
+          "min-h-screen bg-[#d9d9d9] text-[#26150f] antialiased",
+
+          // 2. A Variável CSS (para uso futuro)
+          myFont.variable,
+
+          // 3. A CORREÇÃO: Aplicamos a classe da fonte diretamente!
+          // Isto sobrepõe-se a qualquer 'ui-sans-serif' padrão.
+          myFont.className
         )}
       >
-        <Navbar /> {/* <--- A Navbar entra aqui */}
-        {/* Adicionamos margem à esquerda no desktop para o conteúdo não ficar debaixo da barra */}
+        <Navbar />
         <div className="pt-20 md:pl-[100px] md:pt-0">{children}</div>
       </body>
     </html>
