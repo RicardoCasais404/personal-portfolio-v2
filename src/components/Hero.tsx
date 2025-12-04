@@ -46,9 +46,15 @@ export function Hero() {
   const containerRef = useRef(null);
   const { scrollY } = useScroll();
 
+  // --- SAÍDA ---
   const y = useTransform(scrollY, [0, 500], [0, 150]);
-  const opacity = useTransform(scrollY, [0, 800], [1, 0]);
-  const blurValue = useTransform(scrollY, [0, 800], [0, 4]);
+
+  // AJUSTE 1: Opacidade [0, 550].
+  // Mais rápido que 800, mas lento o suficiente para ser suave.
+  // Isto evita que o texto esteja 100% opaco quando o About bate nele.
+  const opacity = useTransform(scrollY, [0, 550], [1, 0]);
+
+  const blurValue = useTransform(scrollY, [0, 550], [0, 4]);
   const filter = useTransform(blurValue, (v) => `blur(${v}px)`);
 
   return (
@@ -57,20 +63,21 @@ export function Hero() {
       ref={containerRef}
       className="relative flex min-h-screen w-full items-center px-6 pt-20 md:px-12 md:pt-0"
     >
-      <div className="w-full max-w-[1200px] mx-auto">
+      {/*
+         AJUSTE 2: MÁSCARA DE GRADIENTE (A Solução da Harsh Line)
+         Adicionei a classe [mask-image:...] no div abaixo.
+         Isto faz com que os últimos 15-20% de baixo do container sejam transparentes.
+         Assim, quando o About sobe, não há corte seco.
+      */}
+      <div className="w-full max-w-[1200px] mx-auto mask-[linear-gradient(to_bottom,black_80%,transparent_100%)]">
         <motion.div
           initial="hidden"
           animate="visible"
           variants={containerVariants}
           style={{ y, opacity, filter }}
-          className="flex flex-col items-start"
+          className="flex flex-col items-start pb-10" // Adicionei pb-10 para dar margem à máscara
         >
-          {/*
-             VALORES EXATOS DO CSS ORIGINAL (.main-title):
-             font-size: clamp(2.2rem, 10vw, 8rem);
-             font-weight: 800 (extrabold);
-             line-height: 1.1;
-          */}
+          {/* TIPOGRAFIA */}
           <h1 className="flex flex-col items-start w-full text-[clamp(2.2rem,10vw,8rem)] font-extrabold leading-[1.1] tracking-normal text-[#26150f]">
             {/* LINHA 1 */}
             <div className="w-full">

@@ -7,7 +7,10 @@ export function About() {
   return (
     <section
       id="about"
-      className="relative w-full py-20 px-6 md:px-12 md:py-32 bg-[#d9d9d9]"
+      // AQUI ESTÁ A MUDANÇA:
+      // Aumentámos drasticamente o Padding Top (pt-32 e md:pt-64).
+      // Isto empurra o conteúdo para baixo, dando espaço para o Hero desaparecer.
+      className="relative w-full px-6 pt-32 pb-20 md:px-12 md:pt-64 md:pb-32 bg-[#d9d9d9]"
     >
       <div className="w-full max-w-[1200px] mx-auto">
         <div className="flex flex-col gap-12 md:flex-row md:gap-20 items-center">
@@ -27,7 +30,7 @@ export function About() {
 
           {/* DIREITA: TEXTO */}
           <div className="w-full md:w-[65%]">
-            <div className="space-y-8 text-[1.1rem] leading-[1.6] font-normal text-[#26150f]">
+            <div className="space-y-6 text-[#26150f]">
               {aboutData.paragraphs.map((text, index) => (
                 <motion.p
                   key={index}
@@ -35,13 +38,14 @@ export function About() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.6, delay: index * 0.1 }}
+                  className="text-base sm:text-[1.1rem] min-[800px]:text-[1.2rem] leading-[1.7] font-normal"
                 >
                   {text}
                 </motion.p>
               ))}
             </div>
 
-            {/* LINKS SOCIAIS (CSS Original) */}
+            {/* LINKS SOCIAIS */}
             <motion.div
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
@@ -55,21 +59,9 @@ export function About() {
                   href={social.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  // AQUI ESTÁ A TRADUÇÃO EXATA:
-                  // text-base = 1rem
-                  // font-semibold = 600
-                  // pb-[5px] = padding-bottom: 5px
-                  // hover:opacity-70 = opacity: 0.7
-                  // Removi 'uppercase' e 'tracking'
                   className="group relative pb-[5px] text-base font-semibold text-[#26150f] transition-opacity duration-300 hover:opacity-70"
                 >
                   {social.name}
-
-                  {/*
-                     SUBLINHADO (Do style.css original):
-                     w-full (começa visível) -> group-hover:w-0 (desaparece no hover)
-                     h-[1px] (altura original)
-                  */}
                   <span className="absolute bottom-0 left-0 h-px w-full bg-[#26150f] transition-all duration-300 group-hover:w-0" />
                 </a>
               ))}
