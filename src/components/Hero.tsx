@@ -76,7 +76,7 @@ export function Hero() {
           className="flex flex-col items-start pb-10"
         >
           {/* TIPOGRAFIA */}
-          <h1 className="flex flex-col items-start w-full text-[clamp(2.2rem,10vw,8rem)] font-bold leading-[1.1] tracking-normal text-[#26150f]">
+          <h1 className="flex flex-col items-start w-full text-[clamp(2.2rem,10vw,8rem)] font-extrabold leading-[1.1] tracking-normal text-[#26150f]">
             {/* LINHA 1 */}
             <div className="w-full">
               <motion.div variants={slideVariants} className="block">
@@ -100,13 +100,13 @@ export function Hero() {
                   viewBox="0 0 87 92"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
-                  className="h-[0.7em] w-auto text-[#26150f] translate-y-[0.05em]"
+                  className="h-[0.6em] w-auto text-[#26150f] translate-y-[0.05em]"
                   aria-hidden="true"
                 >
                   <path
                     d="M78.0537 46L43.5 82.54L8.94531 46L43.5 9.45898L78.0537 46Z"
                     stroke="currentColor"
-                    strokeWidth="13"
+                    strokeWidth="12"
                   />
                 </svg>
               </motion.div>

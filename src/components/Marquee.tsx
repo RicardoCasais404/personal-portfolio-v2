@@ -7,7 +7,9 @@ export function Marquee() {
   const loopItems = [...items, ...items];
 
   return (
-    <div className="w-full overflow-hidden py-8 bg-[#d9d9d9]">
+    // Voltamos a um padding razoável (py-10 = 40px)
+    // O espaço extra será dado pelo 'gap' na página principal
+    <div className="w-full overflow-hidden py-10 bg-[#d9d9d9]">
       <div className="relative flex w-1/3 mx-auto overflow-hidden mask-[linear-gradient(to_right,transparent,black_20%,black_80%,transparent)]">
         <motion.div
           initial={{ x: 0 }}
@@ -18,7 +20,7 @@ export function Marquee() {
           {loopItems.map((item, index) => (
             <span
               key={index}
-              className="text-1x text-[#26150f] font-light pr-16 select-none"
+              className="text-xl text-[#26150f] font-light pr-16 select-none"
             >
               {item}
             </span>

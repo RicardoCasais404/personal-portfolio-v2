@@ -1,25 +1,10 @@
 "use client";
 
-import { motion, useScroll, useTransform } from "framer-motion";
-import { useRef } from "react";
 import { educationData, type EducationItem } from "@/data/content";
 import { cn } from "@/lib/utils";
+import { motion } from "framer-motion";
 
 export function Education() {
-  // A ref vai para o contentor que tem a altura real do conteúdo
-  const listRef = useRef(null);
-
-  const { scrollYProgress } = useScroll({
-    target: listRef,
-    // Lógica Simples:
-    // 0% = Quando o topo da lista toca no meio do ecrã.
-    // 100% = Quando o fundo da lista toca no meio do ecrã.
-    offset: ["start center", "end center"],
-  });
-
-  // Movimento Linear Puro: de 0% a 100% da altura da linha.
-  const pointTop = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
-
   return (
     <section
       id="education"
@@ -53,28 +38,31 @@ export function Education() {
           </motion.h2>
         </div>
 
-        {/* LISTA E LINHA (O Contentor Principal) */}
-        {/* A ref está aqui. A animação baseia-se na altura DESTE div. */}
-        <div ref={listRef} className="relative">
-          {/*
-             LINHA CENTRAL
-             top-[8px]: Ajuste visual para alinhar o início da linha com o texto "HIGH SCHOOL".
-             h-full: A linha tem a mesma altura que os itens todos juntos.
-          */}
-          <div className="absolute left-5 top-2 h-full w-px bg-[#26150f]/30 md:left-1/2 md:-translate-x-1/2">
-            {/* O PONTO (Símbolo) */}
-            <motion.div
-              style={{ top: pointTop }}
-              className="absolute left-1/2 -translate-x-1/2 -translate-y-1/2 text-2xl text-[#26150f] leading-none bg-[#d9d9d9] z-10"
-            >
-              ❖
-            </motion.div>
+        {/* TIMELINE CONTAINER */}
+        <div className="relative">
+          {/* LINHA CENTRAL (TRACK) */}
+          <div className="absolute left-5 top-0 h-full w-px bg-[#26150f]/30 md:left-1/2 md:-translate-x-1/2">
+            {/*
+               O PONTO (STICKY) - VERSÃO LIMPA
+               1. Removi w-8 h-8 e o background deste div container.
+               2. Usei left-1/2 e -translate-x-1/2 para centrar matematicamente na linha.
+            */}
+            <div className="sticky top-[30vh] mt-14 mb-44 left-1/2 -translate-x-1/2 z-10 flex justify-center">
+              {/*
+                 AQUI ESTÁ O SEGREDO:
+                 O bg-[#d9d9d9] está no span.
+                 px-1: Dá apenas 1 pixel de respiração de lado.
+                 leading-none: Garante que a altura é apenas o tamanho do símbolo.
+                 Resultado: A linha toca quase nas pontas do losango.
+              */}
+              <span className="text-2xl text-[#26150f] leading-none bg-[#d9d9d9] px-1">
+                ❖
+              </span>
+            </div>
           </div>
 
-          {/* ITENS */}
-          <div className="flex flex-col gap-24 md:gap-32 pb-8">
-            {" "}
-            {/* pb-8 dá margem no fim */}
+          {/* LISTA DE ITENS */}
+          <div className="flex flex-col gap-12 md:gap-20 pt-12 pb-12">
             {educationData.items.map((item, index) => {
               return (
                 <div
@@ -93,7 +81,7 @@ export function Education() {
                   <div className="hidden md:block" />
 
                   {/* DIREITA */}
-                  <div className="md:text-left md:pt-40">
+                  <div className="md:text-left md:pt-16">
                     <TimelineBody item={item} align="left" />
                   </div>
                 </div>
@@ -106,7 +94,7 @@ export function Education() {
   );
 }
 
-// SUB-COMPONENTES SIMPLES
+// SUB-COMPONENTES
 
 function TimelineHeader({
   item,
@@ -116,7 +104,13 @@ function TimelineHeader({
   align: "left" | "right";
 }) {
   return (
-    <div className="flex flex-col">
+    <motion.div
+      initial={{ opacity: 0, x: -20 }}
+      whileInView={{ opacity: 1, x: 0 }}
+      viewport={{ margin: "-100px" }}
+      transition={{ duration: 0.5 }}
+      className="flex flex-col"
+    >
       <h3 className="text-2xl font-bold uppercase text-[#26150f] leading-tight">
         {item.title}
       </h3>
@@ -128,13 +122,13 @@ function TimelineHeader({
           href={item.link.url}
           target="_blank"
           rel="noopener noreferrer"
-          className="mt-6 inline-block text-sm font-bold text-[#26150f] underline decoration-1 underline-offset-4 hover:opacity-70 transition-opacity w-fit"
+          className="mt-4 inline-block text-sm font-bold text-[#26150f] underline decoration-1 underline-offset-4 hover:opacity-70 transition-opacity w-fit"
           style={{ alignSelf: align === "right" ? "flex-end" : "flex-start" }}
         >
           {item.link.text}
         </a>
       )}
-    </div>
+    </motion.div>
   );
 }
 
@@ -145,10 +139,15 @@ function TimelineBody({
   align: "left" | "right";
 }) {
   return (
-    <div>
+    <motion.div
+      initial={{ opacity: 0, x: 20 }}
+      whileInView={{ opacity: 1, x: 0 }}
+      viewport={{ margin: "-100px" }}
+      transition={{ duration: 0.5, delay: 0.2 }}
+    >
       <p className="text-base leading-relaxed text-[#26150f] font-normal max-w-[45ch]">
         {item.description}
       </p>
-    </div>
+    </motion.div>
   );
 }

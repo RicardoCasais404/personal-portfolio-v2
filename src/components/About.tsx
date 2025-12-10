@@ -7,14 +7,12 @@ export function About() {
   return (
     <section
       id="about"
-      // AQUI ESTÁ A MUDANÇA:
-      // Aumentámos drasticamente o Padding Top (pt-32 e md:pt-64).
-      // Isto empurra o conteúdo para baixo, dando espaço para o Hero desaparecer.
-      className="relative w-full snap-start px-6 pt-32 pb-20 md:px-12 md:pt-64 md:pb-32 bg-[#d9d9d9]"
+      // SIMETRIA: py-20 (mobile) e md:py-32 (desktop).
+      // Igual em cima e em baixo.
+      className="relative w-full min-h-screen snap-start py-20 px-6 md:px-12 md:py-32 bg-[#d9d9d9] flex flex-col justify-center"
     >
       <div className="w-full max-w-[1200px] mx-auto">
         <div className="flex flex-col gap-12 md:flex-row md:gap-20 items-center">
-          {/* ESQUERDA: TÍTULO */}
           <div className="w-full md:w-[35%]">
             <motion.h2
               initial={{ opacity: 0, y: 50 }}
@@ -28,9 +26,8 @@ export function About() {
             </motion.h2>
           </div>
 
-          {/* DIREITA: TEXTO */}
           <div className="w-full md:w-[65%]">
-            <div className="space-y-6 text-[#26150f]">
+            <div className="space-y-8 text-[1.1rem] leading-[1.6] font-normal text-[#26150f]">
               {aboutData.paragraphs.map((text, index) => (
                 <motion.p
                   key={index}
@@ -38,14 +35,12 @@ export function About() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.6, delay: index * 0.1 }}
-                  className="text-base sm:text-[1.1rem] min-[800px]:text-[1.2rem] leading-[1.7] font-normal"
                 >
                   {text}
                 </motion.p>
               ))}
             </div>
 
-            {/* LINKS SOCIAIS */}
             <motion.div
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}

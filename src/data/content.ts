@@ -108,3 +108,87 @@ export const educationData = {
     },
   ] as EducationItem[],
 };
+
+// --- DADOS DA SECÇÃO PROJECTS ---
+export interface ProjectItem {
+  title: string;
+  description: string;
+  tags: string[]; // Lista de tecnologias (ex: React, CSS)
+  link: string; // Link para o projeto real (Github ou Live Demo)
+  image?: string; // Caminho para a imagem (opcional por agora)
+}
+
+export const projectsData = {
+  title: "PROJECTS",
+  items: [
+    {
+      title: "Project Title 1",
+      description:
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis vulputate pretium mattis. Sed vel erat ac dolor euismod volutpat eu sed ante. Vestibulum hendrerit consectetur quam.",
+      tags: ["Next.js", "Tailwind", "Framer Motion"],
+      link: "https://github.com/RicardoCasais404", // Podes mudar para o link real
+      image: "/placeholder-1.jpg",
+    },
+    {
+      title: "Project Title 2",
+      description:
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis vulputate pretium mattis. Sed vel erat ac dolor euismod volutpat eu sed ante. Vestibulum hendrerit consectetur quam.",
+      tags: ["TypeScript", "Node.js", "PostgreSQL"],
+      link: "https://github.com/RicardoCasais404",
+      image: "/placeholder-2.jpg",
+    },
+    {
+      title: "Project Title 3",
+      description:
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis vulputate pretium mattis. Sed vel erat ac dolor euismod volutpat eu sed ante. Vestibulum hendrerit consectetur quam.",
+      tags: ["React Native", "Firebase", "Stripe"],
+      link: "https://github.com/RicardoCasais404",
+      image: "/placeholder-3.jpg",
+    },
+  ] as ProjectItem[],
+};
+
+// --- DADOS DA SECÇÃO SKILLS ---
+export const skillsData = {
+  title: "SKILLS",
+  list: [
+    "JavaScript",
+    "HTML5",
+    "CSS3",
+    "Node.js",
+    "Python",
+    "SQL",
+    "React",
+    "Next.js",
+    "TypeScript",
+    "Tailwind CSS",
+    "Framer Motion",
+    "Git",
+  ],
+};
+
+// --- DADOS DA SECÇÃO CONTACT ---
+export const contactData = {
+  title: "Ready to Connect?",
+  text: "I'm always open to discussing new opportunities. Let's build something great.",
+  email: {
+    label: "Email Me",
+    address: "mailto:ricardo.casais.404@example.com", // Substitui pelo teu email real
+  },
+  socials: [
+    { name: "GitHub", href: "https://github.com/RicardoCasais404" },
+    { name: "LinkedIn", href: "https://www.linkedin.com/in/ricardocasais404/" },
+  ],
+};
+
+// --- DADOS DO FOOTER ---
+export const footerData = {
+  copyright: "COPYRIGHT ©",
+  author: {
+    first: "RICARDO",
+    last: "CASAIS",
+    code: "404",
+  },
+  year: "2025", // Podes mudar para new Date().getFullYear().toString() se quiseres dinâmico
+  tagline: "Full-Stack Development & Creative Solutions",
+};
