@@ -48,37 +48,35 @@ export function Hero() {
 
   // --- SAÍDA ---
   const y = useTransform(scrollY, [0, 500], [0, 150]);
-
-  // AJUSTE 1: Opacidade [0, 550].
-  // Mais rápido que 800, mas lento o suficiente para ser suave.
-  // Isto evita que o texto esteja 100% opaco quando o About bate nele.
   const opacity = useTransform(scrollY, [0, 550], [1, 0]);
 
-  const blurValue = useTransform(scrollY, [0, 550], [0, 4]);
-  const filter = useTransform(blurValue, (v) => `blur(${v}px)`);
+  // REMOVI O BLUR (Defini como 0 fixo, ou podes remover a linha)
+  // const filter = useTransform(blurValue, (v) => `blur(${v}px)`);
+  // Para simplificar, removemos a prop style 'filter' do componente abaixo.
 
   return (
     <section
       id="hero"
       ref={containerRef}
-      className="relative flex min-h-screen w-full items-center px-6 pt-20 md:px-12 md:pt-0"
+      className="relative flex min-h-screen w-full snap-start items-center px-6 pt-20 md:px-12 md:pt-0"
     >
       {/*
-         AJUSTE 2: MÁSCARA DE GRADIENTE (A Solução da Harsh Line)
-         Adicionei a classe [mask-image:...] no div abaixo.
-         Isto faz com que os últimos 15-20% de baixo do container sejam transparentes.
-         Assim, quando o About sobe, não há corte seco.
+         MÁSCARA CORRIGIDA:
+         Mudei de black_80% para black_95%.
+         Agora a transparência só afeta os últimos 5% do contentor,
+         deixando a Tagline (que está nos 90%) totalmente visível.
       */}
-      <div className="w-full max-w-[1200px] mx-auto mask-[linear-gradient(to_bottom,black_80%,transparent_100%)]">
+      <div className="w-full max-w-[1200px] mx-auto mask-[linear-gradient(to_bottom,black_95%,transparent_100%)]">
         <motion.div
           initial="hidden"
           animate="visible"
           variants={containerVariants}
-          style={{ y, opacity, filter }}
-          className="flex flex-col items-start pb-10" // Adicionei pb-10 para dar margem à máscara
+          // Removi o 'filter' daqui. Apenas Y e Opacity.
+          style={{ y, opacity }}
+          className="flex flex-col items-start pb-10"
         >
           {/* TIPOGRAFIA */}
-          <h1 className="flex flex-col items-start w-full text-[clamp(2.2rem,10vw,8rem)] font-extrabold leading-[1.1] tracking-normal text-[#26150f]">
+          <h1 className="flex flex-col items-start w-full text-[clamp(2.2rem,10vw,8rem)] font-bold leading-[1.1] tracking-normal text-[#26150f]">
             {/* LINHA 1 */}
             <div className="w-full">
               <motion.div variants={slideVariants} className="block">
@@ -122,11 +120,11 @@ export function Hero() {
             </div>
           </h1>
 
-          {/* TAGLINE */}
+          {/* TAGLINE (Agora deve estar 100% visível) */}
           <div className="mt-6 md:mt-8">
             <motion.div
               variants={slideVariants}
-              className="text-[clamp(1rem,3vw,1.5rem)] font-extrabold uppercase tracking-normal"
+              className="text-[clamp(1rem,3vw,1.5rem)] font-bold uppercase tracking-[-0.08em]"
             >
               <span className="font-light">RICARDO</span>CASAIS
               <span className="font-light">404</span>

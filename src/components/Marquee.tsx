@@ -2,21 +2,27 @@
 import { motion } from "framer-motion";
 
 export function Marquee() {
+  const symbol = "❖";
+  const items = Array(8).fill(symbol);
+  const loopItems = [...items, ...items];
+
   return (
-    <div className="w-full overflow-hidden py-12 bg-[#d9d9d9]">
-      <div className="relative flex max-w-[600px] mx-auto overflow-hidden mask-[linear-gradient(to_right,transparent,black_20%,black_80%,transparent)]">
+    <div className="w-full overflow-hidden py-8 bg-[#d9d9d9]">
+      <div className="relative flex w-1/3 mx-auto overflow-hidden mask-[linear-gradient(to_right,transparent,black_20%,black_80%,transparent)]">
         <motion.div
+          initial={{ x: 0 }}
           animate={{ x: "-50%" }}
-          transition={{ duration: 10, ease: "linear", repeat: Infinity }}
-          className="flex flex-nowrap gap-12 whitespace-nowrap"
+          transition={{ duration: 20, ease: "linear", repeat: Infinity }}
+          className="flex flex-nowrap w-max"
         >
-          {/* Repetimos o conteúdo para criar o loop infinito */}
-          <span className="text-2xl tracking-[1rem] text-[#26150f]">
-            ❖❖❖❖❖❖❖❖❖❖
-          </span>
-          <span className="text-2xl tracking-[1rem] text-[#26150f]">
-            ❖❖❖❖❖❖❖❖❖❖
-          </span>
+          {loopItems.map((item, index) => (
+            <span
+              key={index}
+              className="text-1x text-[#26150f] font-light pr-16 select-none"
+            >
+              {item}
+            </span>
+          ))}
         </motion.div>
       </div>
     </div>

@@ -60,7 +60,7 @@ export const educationData = {
       institution: "CODECADEMY",
       link: {
         text: "View certificate",
-        url: "/certificates/code-foundations.pdf",
+        url: "src/certificates/code-foundations.pdf",
       },
       description:
         "Gained a solid introduction to the core principles of programming, including syntax, control flow, and data types. Explored the fundamental workings of the web, such as the client-server model and HTTP requests.",
@@ -71,7 +71,7 @@ export const educationData = {
       institution: "CODECADEMY",
       link: {
         text: "View certificate",
-        url: "/certificates/computer-science.pdf",
+        url: "src/certificates/computer-science.pdf",
       },
       description:
         "A comprehensive path focused on the theoretical foundations of programming. Mastered essential data structures like stacks, queues, and trees, and learned to analyze the efficiency of algorithms using Big O notation.",
@@ -90,7 +90,7 @@ export const educationData = {
       institution: "CODECADEMY",
       link: {
         text: "View certificate",
-        url: "/certificates/front-end-engineering.pdf",
+        url: "src/certificates/front-end-engineering.pdf",
       },
       description:
         "An in-depth career path focused on building modern, responsive, and interactive user interfaces. Mastered front-end technologies including HTML5, CSS3, JavaScript (ES6+), and gained proficiency in the React ecosystem.",
@@ -101,7 +101,7 @@ export const educationData = {
       institution: "CODECADEMY",
       link: {
         text: "View certificate",
-        url: "/certificates/full-stack-engineering.pdf",
+        url: "src/certificates/full-stack-engineering.pdf",
       },
       description:
         "An intensive, end-to-end program covering the entire web development stack. Built upon front-end skills with back-end technologies, including Node.js, Express, and PostgreSQL.",

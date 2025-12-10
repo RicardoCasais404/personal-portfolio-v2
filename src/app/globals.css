@@ -4,7 +4,11 @@
   --font-sans: var(--font-main);
 }
 
-/* GARANTIA EXTRA */
 body {
   font-family: var(--font-main), sans-serif;
+}
+
+html {
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
 }

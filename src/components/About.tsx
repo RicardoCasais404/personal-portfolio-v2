@@ -10,7 +10,7 @@ export function About() {
       // AQUI ESTÁ A MUDANÇA:
       // Aumentámos drasticamente o Padding Top (pt-32 e md:pt-64).
       // Isto empurra o conteúdo para baixo, dando espaço para o Hero desaparecer.
-      className="relative w-full px-6 pt-32 pb-20 md:px-12 md:pt-64 md:pb-32 bg-[#d9d9d9]"
+      className="relative w-full snap-start px-6 pt-32 pb-20 md:px-12 md:pt-64 md:pb-32 bg-[#d9d9d9]"
     >
       <div className="w-full max-w-[1200px] mx-auto">
         <div className="flex flex-col gap-12 md:flex-row md:gap-20 items-center">
