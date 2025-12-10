@@ -35,7 +35,7 @@ function ProjectCard({
   project: ProjectItem;
   index: number;
 }) {
-  const isEven = index % 2 === 0; // Verifica se é par (Projeto 1, 3...)
+  const isEven = index % 2 === 0;
 
   return (
     <div className="flex flex-col md:flex-row gap-12 md:gap-20 items-center">
@@ -85,10 +85,7 @@ function ProjectCard({
           ))}
         </div>
 
-        {/*
-           BOTÃO "VIEW PROJECT" CORRIGIDO
-           Agora é um bloco de largura total (w-full) com a linha a ocupar tudo.
-        */}
+        {/* BOTÃO */}
         <div className="w-full">
           <a
             href={project.link}
@@ -96,17 +93,21 @@ function ProjectCard({
             rel="noopener noreferrer"
             className={cn(
               "group relative flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-[#26150f] pb-3 w-full",
-              // Define o alinhamento do texto dentro da barra cheia
               isEven ? "justify-start" : "justify-end"
             )}
           >
             View Project
             {/*
-               A LINHA:
-               w-full: Ocupa a largura total do container do texto.
-               group-hover:w-0: Encolhe ao passar o rato (efeito inverso).
+               A CORREÇÃO DE DIREÇÃO (INVERTIDA):
+               - isEven (Proj 1, Texto Dir): left-0 (Preso à esquerda, encolhe da direita para esquerda).
+               - !isEven (Proj 2, Texto Esq): right-0 (Preso à direita, encolhe da esquerda para direita).
             */}
-            <span className="absolute bottom-0 left-0 h-0.5 w-full bg-[#26150f] transition-all duration-300 group-hover:w-0" />
+            <span
+              className={cn(
+                "absolute bottom-0 h-0.5 w-full bg-[#26150f] transition-all duration-300 group-hover:w-0",
+                isEven ? "left-0" : "right-0"
+              )}
+            />
           </a>
         </div>
       </div>
