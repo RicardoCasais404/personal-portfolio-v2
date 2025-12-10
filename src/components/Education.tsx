@@ -7,28 +7,30 @@ import { cn } from "@/lib/utils";
 import { SectionWrapper } from "@/components/SectionWrapper";
 
 export function Education() {
-  // A ref agora vai para o contentor principal da lista para medirmos o scroll relativo a ele
   const containerRef = useRef(null);
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    // COMEÇA: Quando o topo da lista chega ao centro do ecrã (onde os teus olhos estão)
-    // ACABA: Quando o fundo da lista chega ao centro do ecrã
+    // Começa quando o topo da lista chega ao meio do ecrã
+    // Acaba quando o fundo da lista chega ao meio do ecrã
     offset: ["start center", "end center"],
   });
 
-  // FÍSICA DO PONTO (Coordenadas Absolutas)
-  // 55px -> Ponto de partida (alinhado com o texto "MULTIMEDIA TECHNIQUES")
-  // calc(100% - 150px) -> Ponto de chegada (alinhado com a descrição final)
+  // FÍSICA DO PONTO (Agora estável porque a secção não se mexe)
+  // 55px: Posição inicial (alinha com o texto da 1ª linha)
+  // calc(100% - 80px): Posição final (alinha com a zona do último item)
   const pointTop = useTransform(
     scrollYProgress,
     [0, 1],
-    ["55px", "calc(100% - 150px)"]
+    ["55px", "calc(100% - 80px)"]
   );
 
   return (
+    // AQUI ESTÁ A CORREÇÃO: enableY={false}
+    // Isto impede a secção de flutuar, garantindo que o cálculo do scroll é exato.
     <SectionWrapper
       id="education"
+      enableY={false}
       className="relative w-full min-h-screen py-20 px-6 md:px-12 md:py-32 bg-[#d9d9d9]"
     >
       <div className="w-full max-w-[1200px] mx-auto">
@@ -55,21 +57,20 @@ export function Education() {
 
         {/* TIMELINE CONTAINER */}
         <div ref={containerRef} className="relative">
-          {/* LINHA CENTRAL (TRACK) */}
+          {/* LINHA CENTRAL */}
           <div className="absolute left-5 top-0 h-full w-px bg-[#26150f]/30 md:left-1/2 md:-translate-x-1/2">
-            {/* O PONTO ANIMADO */}
+            {/* PONTO */}
             <motion.div
               style={{ top: pointTop }}
               className="absolute left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 flex justify-center"
             >
-              {/* Símbolo com fundo para tapar a linha */}
               <span className="text-2xl text-[#26150f] leading-none bg-[#d9d9d9] px-1 pt-1">
                 ❖
               </span>
             </motion.div>
           </div>
 
-          {/* LISTA DE ITENS */}
+          {/* LISTA */}
           <div className="flex flex-col gap-12 md:gap-20 pt-12 pb-12">
             {educationData.items.map((item, index) => {
               return (
@@ -80,15 +81,10 @@ export function Education() {
                     "flex flex-col pl-12 md:pl-0"
                   )}
                 >
-                  {/* ESQUERDA */}
                   <div className="md:text-right md:py-0">
                     <TimelineHeader item={item} align="right" />
                   </div>
-
-                  {/* MEIO (Vazio) */}
                   <div className="hidden md:block" />
-
-                  {/* DIREITA */}
                   <div className="md:text-left md:pt-16">
                     <TimelineBody item={item} align="left" />
                   </div>
@@ -102,7 +98,7 @@ export function Education() {
   );
 }
 
-// SUB-COMPONENTES
+// Sub-componentes (iguais)
 function TimelineHeader({
   item,
   align,

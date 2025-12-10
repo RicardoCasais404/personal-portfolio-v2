@@ -8,42 +8,42 @@ interface Props {
   children: React.ReactNode;
   id?: string;
   className?: string;
+  enableY?: boolean; // Nova propriedade opcional
 }
 
-export function SectionWrapper({ children, id, className }: Props) {
+export function SectionWrapper({
+  children,
+  id,
+  className,
+  enableY = true,
+}: Props) {
   const containerRef = useRef(null);
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    // "start end": Quando o TOPO da secção entra no FUNDO do ecrã (Início da animação)
-    // "end start": Quando o FUNDO da secção sai pelo TOPO do ecrã (Fim da animação)
     offset: ["start end", "end start"],
   });
 
-  // --- A FÍSICA DA ELEGÂNCIA ---
-  // 0 -> 0.15: Entrada (primeiros 15% do scroll da secção)
-  // 0.15 -> 0.85: Mantém-se visível (zona de leitura segura)
-  // 0.85 -> 1: Saída (últimos 15% do scroll)
-
-  // Opacidade: Transparente -> Visível -> Visível -> Transparente
+  // --- A FÍSICA ---
   const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0]);
-
-  // Escala: Pequeno -> Normal -> Normal -> Pequeno (Efeito 3D subtil)
   const scale = useTransform(
     scrollYProgress,
     [0, 0.2, 0.8, 1],
     [0.95, 1, 1, 0.95]
   );
 
-  // Movimento Y: Vem de baixo -> Sítio certo -> Sítio certo -> Sobe um pouco
-  const y = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [100, 0, 0, -100]);
+  // LÓGICA CONDICIONAL:
+  // Se enableY for falso, o valor é sempre 0 (sem movimento).
+  // Se for verdadeiro (padrão), faz a animação normal.
+  const yValue = enableY ? [100, 0, 0, -100] : [0, 0, 0, 0];
+  const y = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], yValue);
 
   return (
     <motion.section
       ref={containerRef}
       id={id}
       style={{ opacity, scale, y }}
-      className={cn("w-full", className)} // Permite receber as classes de cor e padding originais
+      className={cn("w-full", className)}
     >
       {children}
     </motion.section>
