@@ -60,7 +60,7 @@ export const educationData = {
       institution: "CODECADEMY",
       link: {
         text: "View certificate",
-        url: "src/certificates/code-foundations.pdf",
+        url: "/certificates/code-foundations.pdf",
       },
       description:
         "Gained a solid introduction to the core principles of programming, including syntax, control flow, and data types. Explored the fundamental workings of the web, such as the client-server model and HTTP requests.",
@@ -71,7 +71,7 @@ export const educationData = {
       institution: "CODECADEMY",
       link: {
         text: "View certificate",
-        url: "src/certificates/computer-science.pdf",
+        url: "/certificates/computer-science.pdf",
       },
       description:
         "A comprehensive path focused on the theoretical foundations of programming. Mastered essential data structures like stacks, queues, and trees, and learned to analyze the efficiency of algorithms using Big O notation.",
@@ -80,7 +80,10 @@ export const educationData = {
       type: "certificate",
       title: "UX DESIGN",
       institution: "CODECADEMY",
-      link: { text: "View certificate", url: "/certificates/ux-design.pdf" },
+      link: {
+        text: "View certificate",
+        url: "/certificates/ux-design.pdf",
+      },
       description:
         "Developed a strong understanding of the end-to-end UX design process. Practiced key skills including user research, persona creation, wireframing, building interactive prototypes, and conducting usability testing.",
     },
@@ -90,7 +93,7 @@ export const educationData = {
       institution: "CODECADEMY",
       link: {
         text: "View certificate",
-        url: "src/certificates/front-end-engineering.pdf",
+        url: "/certificates/front-end-engineering.pdf",
       },
       description:
         "An in-depth career path focused on building modern, responsive, and interactive user interfaces. Mastered front-end technologies including HTML5, CSS3, JavaScript (ES6+), and gained proficiency in the React ecosystem.",
@@ -101,7 +104,7 @@ export const educationData = {
       institution: "CODECADEMY",
       link: {
         text: "View certificate",
-        url: "src/certificates/full-stack-engineering.pdf",
+        url: "/certificates/full-stack-engineering.pdf",
       },
       description:
         "An intensive, end-to-end program covering the entire web development stack. Built upon front-end skills with back-end technologies, including Node.js, Express, and PostgreSQL.",
@@ -173,7 +176,7 @@ export const contactData = {
   text: "I'm always open to discussing new opportunities. Let's build something great.",
   email: {
     label: "Email Me",
-    address: "mailto:ricardo.casais.404@example.com", // Substitui pelo teu email real
+    address: "mailto:ricardocasais2@gmail.com", // Substitui pelo teu email real
   },
   socials: [
     { name: "GitHub", href: "https://github.com/RicardoCasais404" },

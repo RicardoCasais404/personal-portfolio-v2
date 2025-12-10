@@ -7,8 +7,3 @@
 body {
   font-family: var(--font-main), sans-serif;
 }
-
-html {
-  scroll-snap-type: y proximity;
-  scroll-behavior: smooth;
-}

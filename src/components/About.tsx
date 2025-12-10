@@ -2,19 +2,22 @@
 
 import { motion } from "framer-motion";
 import { aboutData } from "@/data/content";
+import { SectionWrapper } from "@/components/SectionWrapper"; // <--- Importar Wrapper
 
 export function About() {
   return (
-    <section
+    // Substituímos <section> por <SectionWrapper>
+    // Mantemos todas as classes de estilo (bg, padding, etc.)
+    <SectionWrapper
       id="about"
-      // SIMETRIA: py-20 (mobile) e md:py-32 (desktop).
-      // Igual em cima e em baixo.
-      className="relative w-full min-h-screen snap-start py-20 px-6 md:px-12 md:py-32 bg-[#d9d9d9] flex flex-col justify-center"
+      className="relative min-h-screen py-20 px-6 md:px-12 md:py-32 bg-[#d9d9d9] flex flex-col justify-center"
     >
       <div className="w-full max-w-[1200px] mx-auto">
         <div className="flex flex-col gap-12 md:flex-row md:gap-20 items-center">
           <div className="w-full md:w-[35%]">
             <motion.h2
+              // Nota: Podemos simplificar as animações internas agora,
+              // mas mantê-las não faz mal (animação dentro de animação).
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-100px" }}
@@ -29,25 +32,11 @@ export function About() {
           <div className="w-full md:w-[65%]">
             <div className="space-y-8 text-[1.1rem] leading-[1.6] font-normal text-[#26150f]">
               {aboutData.paragraphs.map((text, index) => (
-                <motion.p
-                  key={index}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: index * 0.1 }}
-                >
-                  {text}
-                </motion.p>
+                <p key={index}>{text}</p>
               ))}
             </div>
 
-            <motion.div
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.4, duration: 0.8 }}
-              className="mt-12 flex flex-wrap gap-8"
-            >
+            <div className="mt-12 flex flex-wrap gap-8">
               {aboutData.socials.map((social) => (
                 <a
                   key={social.name}
@@ -60,10 +49,10 @@ export function About() {
                   <span className="absolute bottom-0 left-0 h-px w-full bg-[#26150f] transition-all duration-300 group-hover:w-0" />
                 </a>
               ))}
-            </motion.div>
+            </div>
           </div>
         </div>
       </div>
-    </section>
+    </SectionWrapper>
   );
 }
