@@ -4,25 +4,35 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 import { educationData, type EducationItem } from "@/data/content";
 import { cn } from "@/lib/utils";
-import { SectionWrapper } from "@/components/SectionWrapper"; // <--- Importar
+import { SectionWrapper } from "@/components/SectionWrapper";
 
 export function Education() {
-  const timelineRef = useRef(null);
+  // A ref agora vai para o contentor principal da lista para medirmos o scroll relativo a ele
+  const containerRef = useRef(null);
 
   const { scrollYProgress } = useScroll({
-    target: timelineRef,
+    target: containerRef,
+    // COMEÇA: Quando o topo da lista chega ao centro do ecrã (onde os teus olhos estão)
+    // ACABA: Quando o fundo da lista chega ao centro do ecrã
     offset: ["start center", "end center"],
   });
 
-  const pointTop = useTransform(scrollYProgress, [0, 1], ["48px", "100%"]);
+  // FÍSICA DO PONTO (Coordenadas Absolutas)
+  // 55px -> Ponto de partida (alinhado com o texto "MULTIMEDIA TECHNIQUES")
+  // calc(100% - 150px) -> Ponto de chegada (alinhado com a descrição final)
+  const pointTop = useTransform(
+    scrollYProgress,
+    [0, 1],
+    ["55px", "calc(100% - 150px)"]
+  );
 
   return (
-    // Wrapper aqui
     <SectionWrapper
       id="education"
-      className="relative min-h-screen py-20 px-6 md:px-12 md:py-32 bg-[#d9d9d9]"
+      className="relative w-full min-h-screen py-20 px-6 md:px-12 md:py-32 bg-[#d9d9d9]"
     >
       <div className="w-full max-w-[1200px] mx-auto">
+        {/* TÍTULO */}
         <div className="mb-32 text-center">
           <h2 className="text-[#26150f] font-extrabold uppercase leading-[0.9] tracking-normal">
             <span className="block text-[clamp(2.5rem,8vw,5rem)]">
@@ -32,6 +42,7 @@ export function Education() {
               <svg
                 viewBox="0 0 87 92"
                 fill="currentColor"
+                xmlns="http://www.w3.org/2000/svg"
                 className="h-[0.6em] w-auto text-[#26150f]"
                 aria-hidden="true"
               >
@@ -42,34 +53,48 @@ export function Education() {
           </h2>
         </div>
 
-        <div ref={timelineRef} className="relative">
+        {/* TIMELINE CONTAINER */}
+        <div ref={containerRef} className="relative">
+          {/* LINHA CENTRAL (TRACK) */}
           <div className="absolute left-5 top-0 h-full w-px bg-[#26150f]/30 md:left-1/2 md:-translate-x-1/2">
+            {/* O PONTO ANIMADO */}
             <motion.div
               style={{ top: pointTop }}
-              className="absolute left-1/2 -translate-x-1/2 -translate-y-1/2 text-2xl text-[#26150f] leading-none bg-[#d9d9d9] z-10 mt-2.5"
+              className="absolute left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 flex justify-center"
             >
-              ❖
+              {/* Símbolo com fundo para tapar a linha */}
+              <span className="text-2xl text-[#26150f] leading-none bg-[#d9d9d9] px-1 pt-1">
+                ❖
+              </span>
             </motion.div>
           </div>
 
+          {/* LISTA DE ITENS */}
           <div className="flex flex-col gap-12 md:gap-20 pt-12 pb-12">
-            {educationData.items.map((item, index) => (
-              <div
-                key={index}
-                className={cn(
-                  "relative md:grid md:grid-cols-[1fr_80px_1fr] md:items-start",
-                  "flex flex-col pl-12 md:pl-0"
-                )}
-              >
-                <div className="md:text-right md:py-0">
-                  <TimelineHeader item={item} align="right" />
+            {educationData.items.map((item, index) => {
+              return (
+                <div
+                  key={index}
+                  className={cn(
+                    "relative md:grid md:grid-cols-[1fr_80px_1fr] md:items-start",
+                    "flex flex-col pl-12 md:pl-0"
+                  )}
+                >
+                  {/* ESQUERDA */}
+                  <div className="md:text-right md:py-0">
+                    <TimelineHeader item={item} align="right" />
+                  </div>
+
+                  {/* MEIO (Vazio) */}
+                  <div className="hidden md:block" />
+
+                  {/* DIREITA */}
+                  <div className="md:text-left md:pt-16">
+                    <TimelineBody item={item} align="left" />
+                  </div>
                 </div>
-                <div className="hidden md:block" />
-                <div className="md:text-left md:pt-16">
-                  <TimelineBody item={item} align="left" />
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </div>
@@ -77,7 +102,7 @@ export function Education() {
   );
 }
 
-// Sub-componentes mantidos iguais...
+// SUB-COMPONENTES
 function TimelineHeader({
   item,
   align,
