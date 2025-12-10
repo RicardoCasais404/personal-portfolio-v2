@@ -35,30 +35,27 @@ export function Education() {
 
         {/* TIMELINE CONTAINER */}
         <div className="relative">
-          {/*
-             A "PISTA" (TRACK) - AJUSTADA
-             top-[103px]: 55px (original) + 48px (ajuste) = Começa mais abaixo.
-             bottom-[198px]: 150px (original) + 48px (ajuste) = Acaba mais cedo.
-          */}
-          <div className="absolute left-5 top-[103px] bottom-[198px] w-px md:left-1/2 md:-translate-x-1/2">
-            {/* Linha de Fundo */}
-            <div className="absolute inset-0 w-full h-full bg-[#26150f]/30"></div>
+          {/* CAMADA 1: A LINHA VISUAL (COMPRIDA) */}
+          {/* Começa em 55px e acaba em 150px. É a linha toda. */}
+          <div className="absolute left-5 top-[55px] bottom-[150px] w-px md:left-1/2 md:-translate-x-1/2 bg-[#26150f]/30"></div>
 
+          {/* CAMADA 2: A PISTA DO SÍMBOLO (MAIS CURTA) */}
+          {/*
+             Começa 48px mais abaixo (55 + 48 = 103px)
+             Acaba 48px mais acima (150 + 48 = 198px)
+             O símbolo só existe dentro destes limites.
+          */}
+          <div className="absolute left-5 top-[103px] bottom-[198px] w-px md:left-1/2 md:-translate-x-1/2 z-10 pointer-events-none">
             {/* O PONTO STICKY */}
-            <div className="sticky top-1/2 -translate-x-1/2 -translate-y-1/2 z-10 flex justify-center">
-              {/*
-                 SÍMBOLO LIMPO
-                 leading-none: Remove altura extra da fonte.
-                 px-[2px]: Apenas o mínimo para cortar a linha de 1px atrás.
-                 Sem pt ou pb: Remove o "quadrado" vertical.
-              */}
+            <div className="sticky top-1/2 -translate-x-1/2 -translate-y-1/2 flex justify-center">
+              {/* Símbolo com fundo ajustado ao desenho */}
               <span className="text-2xl text-[#26150f] leading-none bg-[#d9d9d9] px-0.5">
                 ❖
               </span>
             </div>
           </div>
 
-          {/* LISTA */}
+          {/* LISTA DE ITENS */}
           <div className="flex flex-col gap-12 md:gap-20 pt-12 pb-12">
             {educationData.items.map((item, index) => {
               return (
