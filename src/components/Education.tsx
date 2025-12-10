@@ -1,33 +1,12 @@
 "use client";
 
-import { motion, useScroll, useTransform } from "framer-motion";
-import { useRef } from "react";
 import { educationData, type EducationItem } from "@/data/content";
 import { cn } from "@/lib/utils";
 import { SectionWrapper } from "@/components/SectionWrapper";
 
 export function Education() {
-  const containerRef = useRef(null);
-
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    // Começa quando o topo da lista chega ao meio do ecrã
-    // Acaba quando o fundo da lista chega ao meio do ecrã
-    offset: ["start center", "end center"],
-  });
-
-  // FÍSICA DO PONTO (Agora estável porque a secção não se mexe)
-  // 55px: Posição inicial (alinha com o texto da 1ª linha)
-  // calc(100% - 80px): Posição final (alinha com a zona do último item)
-  const pointTop = useTransform(
-    scrollYProgress,
-    [0, 1],
-    ["55px", "calc(100% - 80px)"]
-  );
-
   return (
-    // AQUI ESTÁ A CORREÇÃO: enableY={false}
-    // Isto impede a secção de flutuar, garantindo que o cálculo do scroll é exato.
+    // Mantemos o enableY={false} para estabilidade total
     <SectionWrapper
       id="education"
       enableY={false}
@@ -56,21 +35,33 @@ export function Education() {
         </div>
 
         {/* TIMELINE CONTAINER */}
-        <div ref={containerRef} className="relative">
-          {/* LINHA CENTRAL */}
-          <div className="absolute left-5 top-0 h-full w-px bg-[#26150f]/30 md:left-1/2 md:-translate-x-1/2">
-            {/* PONTO */}
-            <motion.div
-              style={{ top: pointTop }}
-              className="absolute left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 flex justify-center"
-            >
+        <div className="relative">
+          {/*
+             A "PISTA" (TRACK) - A SOLUÇÃO MÁGICA
+             absolute: Posicionada relativamente à lista.
+             top-[55px]: Começa exatamente alinhada com o 1º Título.
+             bottom-[150px]: Acaba exatamente alinhada com a última Descrição.
+             left-[20px] / md:left-1/2: Posição horizontal correta.
+          */}
+          <div className="absolute left-5 top-[55px] bottom-[150px] w-px md:left-1/2 md:-translate-x-1/2">
+            {/* A LINHA VISÍVEL (Fundo) */}
+            <div className="absolute inset-0 w-full h-full bg-[#26150f]/30"></div>
+
+            {/* O PONTO STICKY */}
+            {/*
+               sticky top-1/2: O ponto tenta ficar sempre no centro do ecrã.
+               Como está preso dentro desta div (Pista), ele só desliza
+               do topo (55px) até ao fundo (bottom-150px).
+            */}
+            <div className="sticky top-1/2 -translate-x-1/2 -translate-y-1/2 z-10 flex justify-center">
               <span className="text-2xl text-[#26150f] leading-none bg-[#d9d9d9] px-1 pt-1">
                 ❖
               </span>
-            </motion.div>
+            </div>
           </div>
 
-          {/* LISTA */}
+          {/* LISTA DE ITENS */}
+          {/* pt-12 (48px) + um pouco de margem do texto dá os 55px visuais */}
           <div className="flex flex-col gap-12 md:gap-20 pt-12 pb-12">
             {educationData.items.map((item, index) => {
               return (
@@ -98,7 +89,7 @@ export function Education() {
   );
 }
 
-// Sub-componentes (iguais)
+// SUB-COMPONENTES
 function TimelineHeader({
   item,
   align,
