@@ -6,7 +6,6 @@ import { SectionWrapper } from "@/components/SectionWrapper";
 
 export function Education() {
   return (
-    // Mantemos o enableY={false} para estabilidade total
     <SectionWrapper
       id="education"
       enableY={false}
@@ -37,31 +36,29 @@ export function Education() {
         {/* TIMELINE CONTAINER */}
         <div className="relative">
           {/*
-             A "PISTA" (TRACK) - A SOLUÇÃO MÁGICA
-             absolute: Posicionada relativamente à lista.
-             top-[55px]: Começa exatamente alinhada com o 1º Título.
-             bottom-[150px]: Acaba exatamente alinhada com a última Descrição.
-             left-[20px] / md:left-1/2: Posição horizontal correta.
+             A "PISTA" (TRACK) - AJUSTADA
+             top-[103px]: 55px (original) + 48px (ajuste) = Começa mais abaixo.
+             bottom-[198px]: 150px (original) + 48px (ajuste) = Acaba mais cedo.
           */}
-          <div className="absolute left-5 top-[55px] bottom-[150px] w-px md:left-1/2 md:-translate-x-1/2">
-            {/* A LINHA VISÍVEL (Fundo) */}
+          <div className="absolute left-5 top-[103px] bottom-[198px] w-px md:left-1/2 md:-translate-x-1/2">
+            {/* Linha de Fundo */}
             <div className="absolute inset-0 w-full h-full bg-[#26150f]/30"></div>
 
             {/* O PONTO STICKY */}
-            {/*
-               sticky top-1/2: O ponto tenta ficar sempre no centro do ecrã.
-               Como está preso dentro desta div (Pista), ele só desliza
-               do topo (55px) até ao fundo (bottom-150px).
-            */}
             <div className="sticky top-1/2 -translate-x-1/2 -translate-y-1/2 z-10 flex justify-center">
-              <span className="text-2xl text-[#26150f] leading-none bg-[#d9d9d9] px-1 pt-1">
+              {/*
+                 SÍMBOLO LIMPO
+                 leading-none: Remove altura extra da fonte.
+                 px-[2px]: Apenas o mínimo para cortar a linha de 1px atrás.
+                 Sem pt ou pb: Remove o "quadrado" vertical.
+              */}
+              <span className="text-2xl text-[#26150f] leading-none bg-[#d9d9d9] px-0.5">
                 ❖
               </span>
             </div>
           </div>
 
-          {/* LISTA DE ITENS */}
-          {/* pt-12 (48px) + um pouco de margem do texto dá os 55px visuais */}
+          {/* LISTA */}
           <div className="flex flex-col gap-12 md:gap-20 pt-12 pb-12">
             {educationData.items.map((item, index) => {
               return (
