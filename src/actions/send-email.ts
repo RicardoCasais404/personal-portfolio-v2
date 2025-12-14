@@ -48,7 +48,7 @@ export async function sendEmail(
   try {
     await resend.emails.send({
       from: "Portfolio Contact <onboarding@resend.dev>",
-      to: "ricardo.casais.404@example.com", // Confirma que este é o teu email
+      to: "ricardocasais2@gmail.com", // Confirma que este é o teu email
       subject: `New message from ${name}`,
 
       // CORREÇÃO 1: Mudámos de 'reply_to' para 'replyTo' (camelCase)
