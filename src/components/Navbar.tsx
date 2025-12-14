@@ -4,7 +4,6 @@ import Link from "next/link";
 import { Logo } from "@/components/Logo";
 import { useScrollSpy } from "@/hooks/useScrollSpy";
 import { cn } from "@/lib/utils";
-// 1. Importamos o nosso Hook
 import { useSmoothScroll } from "@/components/SmoothScroll";
 
 const navItems = [
@@ -17,34 +16,62 @@ const navItems = [
 
 export function Navbar() {
   const activeSection = useScrollSpy();
-  // 2. Acedemos ao motor de scroll
   const lenis = useSmoothScroll();
 
-  // 3. Função para lidar com o clique
   const handleScroll = (
     e: React.MouseEvent<HTMLAnchorElement>,
     href: string
   ) => {
-    e.preventDefault(); // Impede o salto feio
-
-    // Se o Lenis estiver carregado, usamos ele para navegar
+    e.preventDefault();
     if (lenis) {
-      lenis.scrollTo(href, { duration: 1.5 }); // duration controla a velocidade da viagem
+      lenis.scrollTo(href, { duration: 1.5 });
     }
   };
 
   return (
-    <aside className="fixed left-0 top-0 z-50 flex w-full flex-row items-center justify-between border-b border-[#26150f] bg-[#d9d9d9] px-6 py-4 md:h-screen md:w-[100px] md:flex-col md:border-b-0 md:border-r md:py-10">
+    <aside
+      className={cn(
+        "fixed left-0 top-0 z-50 flex w-full items-center bg-[#d9d9d9] border-b border-[#26150f]",
+        // MOBILE (Layout Horizontal):
+        // px-5: Margem lateral.
+        // py-4: Altura da barra.
+        // gap-8: Espaço OBRIGATÓRIO de 32px entre o Logo e os Links.
+        "flex-row px-5 py-4 gap-8",
+
+        // DESKTOP (Layout Vertical):
+        // Resetamos o gap, mudamos padding e bordas.
+        "md:h-screen md:w-[100px] md:flex-col md:border-b-0 md:border-r md:py-10 md:px-0 md:justify-between md:gap-0"
+      )}
+    >
+      {/* 1. LOGÓTIPO */}
       <Link
         href="#hero"
         aria-label="Voltar ao topo"
-        // Também aplicamos ao Logo para voltar ao topo suavemente
         onClick={(e) => handleScroll(e, "#hero")}
+        // shrink-0: Impede o logo de ser esmagado.
+        className="shrink-0"
       >
         <Logo className="h-8 w-auto transition-transform duration-500 hover:rotate-90 md:h-9" />
       </Link>
 
-      <nav className="flex flex-row gap-6 md:flex-col md:gap-10">
+      {/* 2. LINKS DE NAVEGAÇÃO */}
+      <nav
+        className={cn(
+          "flex items-center",
+
+          // MOBILE (Scrollable):
+          // overflow-x-auto: Permite deslizar para o lado se não couber.
+          // no-scrollbar: Esconde a barra feia.
+          // w-full: Ocupa o resto do espaço disponível.
+          // gap-6: Espaço entre cada palavra.
+          // pr-6: Margem de segurança no fim da lista (para não cortar o último item).
+          "flex-row w-full overflow-x-auto no-scrollbar gap-6 pr-6",
+
+          // DESKTOP (Vertical):
+          // Desliga o scroll (overflow-visible) e muda para coluna.
+          "md:w-auto md:flex-col md:gap-10 md:overflow-visible md:pr-0"
+        )}
+      >
         {navItems.map((item) => {
           const isActive = activeSection === item.href.substring(1);
 
@@ -52,9 +79,9 @@ export function Navbar() {
             <Link
               key={item.name}
               href={item.href}
-              // AQUI: Adicionamos o evento onClick
               onClick={(e) => handleScroll(e, item.href)}
-              className="group relative flex items-center justify-center"
+              // shrink-0: Garante que o texto não quebra de linha nem encolhe.
+              className="group relative flex items-center justify-center shrink-0"
             >
               <span
                 className={cn(
@@ -68,8 +95,12 @@ export function Navbar() {
               <span
                 className={cn(
                   "absolute bg-[#26150f] transition-all duration-300 ease-out",
+
+                  // Mobile
                   "-bottom-2 left-0 h-[0.5px]",
                   isActive ? "w-full" : "w-0 group-hover:w-full",
+
+                  // Desktop
                   "md:left-auto",
                   "md:bottom-0 md:top-auto",
                   "md:-right-1",
