@@ -64,7 +64,7 @@ export async function sendEmail(
   try {
     await resend.emails.send({
       from: "Portfolio Contact <onboarding@resend.dev>",
-      to: "ricardo.casais.404@example.com", // O teu email
+      to: "ricardocasais2@gmail.com",
       subject: `New message from ${name}`,
       replyTo: email,
       text: `Name: ${name}\nEmail: ${email}\nMessage: ${message}`,
