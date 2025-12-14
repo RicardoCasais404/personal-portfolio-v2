@@ -2,22 +2,18 @@
 
 import { motion } from "framer-motion";
 import { aboutData } from "@/data/content";
-import { SectionWrapper } from "@/components/SectionWrapper"; // <--- Importar Wrapper
+import { SectionWrapper } from "@/components/SectionWrapper";
 
 export function About() {
   return (
-    // Substituímos <section> por <SectionWrapper>
-    // Mantemos todas as classes de estilo (bg, padding, etc.)
     <SectionWrapper
       id="about"
-      className="relative min-h-screen py-20 px-6 md:px-12 md:py-32 bg-[#d9d9d9] flex flex-col justify-center"
+      className="relative min-h-screen py-12 px-6 md:px-12 md:py-32 bg-[#d9d9d9] flex flex-col justify-center"
     >
       <div className="w-full max-w-[1200px] mx-auto">
         <div className="flex flex-col gap-12 md:flex-row md:gap-20 items-center">
           <div className="w-full md:w-[35%]">
             <motion.h2
-              // Nota: Podemos simplificar as animações internas agora,
-              // mas mantê-las não faz mal (animação dentro de animação).
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-100px" }}

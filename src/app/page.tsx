@@ -9,38 +9,34 @@ import { Marquee } from "@/components/Marquee";
 
 export default function Home() {
   return (
-    // REMOVIDO: 'gap-32'. Agora confiamos no padding das secções.
     <main className="flex min-h-screen flex-col items-center justify-between bg-[#d9d9d9]">
       <Hero />
 
-      {/*
-         REMOVI os divs 'wrapper' (w-full flex flex-col gap-32).
-         Agora os componentes estão "soltos".
-         Isto permite que o padding interno de cada um dite o espaçamento.
-      */}
+      {/* Container Principal */}
+      <div className="w-full flex flex-col">
+        {/* 1. ABOUT */}
+        <About />
 
-      <About />
-
-      <Marquee />
-
-      <Education />
-
-      <Marquee />
-
-      <Projects />
-
-      <Marquee />
-
-      <Skills />
-
-      {/* Bloco Final: Separador + Contacto + Footer */}
-      <div className="w-full flex flex-col snap-start min-h-screen">
+        {/* 2. PROJECTS */}
         <Marquee />
-        {/* 'flex-1' no Contact empurra o Footer para o fundo se sobrar espaço */}
-        <div className="flex-1 flex flex-col justify-center">
-          <Contact />
+        <Projects />
+
+        {/* 3. EDUCATION */}
+        <Marquee />
+        <Education />
+
+        {/* 4. SKILLS */}
+        <Marquee />
+        <Skills />
+
+        {/* 5. CONTACTO + FOOTER */}
+        <div className="w-full flex flex-col snap-start min-h-screen">
+          <Marquee />
+          <div className="flex-1 flex flex-col justify-center">
+            <Contact />
+          </div>
+          <Footer />
         </div>
-        <Footer />
       </div>
     </main>
   );

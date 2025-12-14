@@ -9,11 +9,12 @@ export function Education() {
     <SectionWrapper
       id="education"
       enableY={false}
-      className="relative w-full min-h-screen py-20 px-6 md:px-12 md:py-32 bg-[#d9d9d9]"
+      // py-12 (Mobile)
+      className="relative w-full min-h-screen py-12 px-6 md:px-12 md:py-32 bg-[#d9d9d9]"
     >
       <div className="w-full max-w-[1200px] mx-auto">
-        {/* TÍTULO */}
-        <div className="mb-32 text-center">
+        {/* TÍTULO: mb-12 (Mobile) vs mb-32 (Desktop) */}
+        <div className="mb-12 md:mb-32 text-center">
           <h2 className="text-[#26150f] font-extrabold uppercase leading-[0.9] tracking-normal">
             <span className="block text-[clamp(2.5rem,8vw,5rem)]">
               {educationData.titlePart1}
@@ -33,49 +34,35 @@ export function Education() {
           </h2>
         </div>
 
-        {/* TIMELINE CONTAINER */}
+        {/* ... (Resto do código da timeline mantém-se IGUAL) ... */}
+        {/* Copia o resto do código da timeline do teu ficheiro anterior ou do passo 43 */}
         <div className="relative">
-          {/* CAMADA 1: A LINHA VISUAL (COMPRIDA) */}
-          {/* Começa em 55px e acaba em 150px. É a linha toda. */}
           <div className="absolute left-5 top-[55px] bottom-[150px] w-px md:left-1/2 md:-translate-x-1/2 bg-[#26150f]/30"></div>
-
-          {/* CAMADA 2: A PISTA DO SÍMBOLO (MAIS CURTA) */}
-          {/*
-             Começa 48px mais abaixo (55 + 48 = 103px)
-             Acaba 48px mais acima (150 + 48 = 198px)
-             O símbolo só existe dentro destes limites.
-          */}
           <div className="absolute left-5 top-[103px] bottom-[198px] w-px md:left-1/2 md:-translate-x-1/2 z-10 pointer-events-none">
-            {/* O PONTO STICKY */}
             <div className="sticky top-1/2 -translate-x-1/2 -translate-y-1/2 flex justify-center">
-              {/* Símbolo com fundo ajustado ao desenho */}
               <span className="text-2xl text-[#26150f] leading-none bg-[#d9d9d9] px-0.5">
                 ❖
               </span>
             </div>
           </div>
-
-          {/* LISTA DE ITENS */}
           <div className="flex flex-col gap-12 md:gap-20 pt-12 pb-12">
-            {educationData.items.map((item, index) => {
-              return (
-                <div
-                  key={index}
-                  className={cn(
-                    "relative md:grid md:grid-cols-[1fr_80px_1fr] md:items-start",
-                    "flex flex-col pl-12 md:pl-0"
-                  )}
-                >
-                  <div className="md:text-right md:py-0">
-                    <TimelineHeader item={item} align="right" />
-                  </div>
-                  <div className="hidden md:block" />
-                  <div className="md:text-left md:pt-16">
-                    <TimelineBody item={item} align="left" />
-                  </div>
+            {educationData.items.map((item, index) => (
+              <div
+                key={index}
+                className={cn(
+                  "relative md:grid md:grid-cols-[1fr_80px_1fr] md:items-start",
+                  "flex flex-col pl-12 md:pl-0"
+                )}
+              >
+                <div className="md:text-right md:py-0">
+                  <TimelineHeader item={item} align="right" />
                 </div>
-              );
-            })}
+                <div className="hidden md:block" />
+                <div className="md:text-left md:pt-16">
+                  <TimelineBody item={item} align="left" />
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </div>
@@ -83,7 +70,7 @@ export function Education() {
   );
 }
 
-// SUB-COMPONENTES
+// Sub-componentes (iguais aos anteriores)
 function TimelineHeader({
   item,
   align,
@@ -113,7 +100,6 @@ function TimelineHeader({
     </div>
   );
 }
-
 function TimelineBody({
   item,
 }: {
