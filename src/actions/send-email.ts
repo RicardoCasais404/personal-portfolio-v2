@@ -3,9 +3,6 @@
 import { Resend } from "resend";
 import { z } from "zod";
 
-// REMOVI A INICIALIZAÇÃO DAQUI.
-// Se a chave falhar aqui, o site inteiro vai abaixo.
-
 const ContactSchema = z.object({
   name: z.string().min(2, { message: "Name must be at least 2 characters." }),
   email: z.string().email({ message: "Please enter a valid email address." }),
@@ -28,9 +25,23 @@ export async function sendEmail(
   prevState: ContactFormState,
   formData: FormData
 ): Promise<ContactFormState> {
-  // 1. INICIALIZAR AQUI DENTRO (SEGURANÇA)
-  // Assim o site carrega sempre, mesmo se a chave estiver em falta.
-  const resend = new Resend(process.env.RESEND_API_KEY);
+  // 1. VERIFICAÇÃO DE SEGURANÇA (CINTO DE SEGURANÇA)
+  // Antes de fazer qualquer coisa, vemos se a chave existe.
+  const apiKey = process.env.RESEND_API_KEY;
+
+  if (!apiKey) {
+    console.error(
+      "❌ ERRO CRÍTICO: A RESEND_API_KEY não foi encontrada nas variáveis de ambiente."
+    );
+    return {
+      success: false,
+      message: "Server Error: Missing API Key configuration.",
+    };
+  }
+
+  // 2. INICIALIZAÇÃO SEGURA
+  // Só chegamos aqui se a chave existir.
+  const resend = new Resend(apiKey);
 
   const rawData = {
     name: formData.get("name"),
@@ -53,7 +64,7 @@ export async function sendEmail(
   try {
     await resend.emails.send({
       from: "Portfolio Contact <onboarding@resend.dev>",
-      to: "ricardo.casais.404@example.com", // O teu email real
+      to: "ricardo.casais.404@example.com", // O teu email
       subject: `New message from ${name}`,
       replyTo: email,
       text: `Name: ${name}\nEmail: ${email}\nMessage: ${message}`,
