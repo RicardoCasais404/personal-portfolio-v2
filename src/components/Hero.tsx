@@ -37,7 +37,6 @@ export function Hero() {
   const containerRef = useRef(null);
   const { scrollY } = useScroll();
 
-  // AJUSTE MOBILE: Parallax mais curto
   const y = useTransform(scrollY, [0, 500], [0, 100]);
   const opacity = useTransform(scrollY, [0, 300], [1, 0]);
 
@@ -45,6 +44,7 @@ export function Hero() {
     <section
       id="hero"
       ref={containerRef}
+      // Mantemos o alinhamento.
       className="relative flex min-h-screen w-full items-center px-6 pt-20 md:px-12 md:pt-0"
     >
       <div className="w-full max-w-[1200px] mx-auto mask-[linear-gradient(to_bottom,black_80%,transparent_100%)]">
@@ -53,9 +53,16 @@ export function Hero() {
           animate="visible"
           variants={containerVariants}
           style={{ y, opacity }}
-          className="flex flex-col items-start pb-20"
+          // CORREÇÃO ESPAÇO: Reduzi pb-20 para pb-4.
+          // Isto remove o espaço morto debaixo do texto.
+          className="flex flex-col items-start pb-4"
         >
-          <h1 className="flex flex-col items-start w-full text-[clamp(2.2rem,10vw,8rem)] font-bold leading-[1.1] tracking-normal text-[#26150f]">
+          {/*
+             CORREÇÃO TEXTO:
+             Aumentei 10vw para 15vw. O texto vai crescer horizontalmente e verticalmente.
+             Aumentei o mínimo de 2.2rem para 3rem.
+          */}
+          <h1 className="flex flex-col items-start w-full text-[clamp(3rem,15vw,9rem)] font-bold leading-[1.1] tracking-normal text-[#26150f]">
             <div className="w-full">
               <motion.div variants={slideVariants} className="block">
                 FULL-STACK
