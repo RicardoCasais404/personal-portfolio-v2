@@ -3,7 +3,8 @@
 import { Resend } from "resend";
 import { z } from "zod";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+// REMOVI A INICIALIZAÇÃO DAQUI.
+// Se a chave falhar aqui, o site inteiro vai abaixo.
 
 const ContactSchema = z.object({
   name: z.string().min(2, { message: "Name must be at least 2 characters." }),
@@ -27,6 +28,10 @@ export async function sendEmail(
   prevState: ContactFormState,
   formData: FormData
 ): Promise<ContactFormState> {
+  // 1. INICIALIZAR AQUI DENTRO (SEGURANÇA)
+  // Assim o site carrega sempre, mesmo se a chave estiver em falta.
+  const resend = new Resend(process.env.RESEND_API_KEY);
+
   const rawData = {
     name: formData.get("name"),
     email: formData.get("email"),
@@ -48,18 +53,14 @@ export async function sendEmail(
   try {
     await resend.emails.send({
       from: "Portfolio Contact <onboarding@resend.dev>",
-      to: "ricardocasais2@gmail.com", // Confirma que este é o teu email
+      to: "ricardo.casais.404@example.com", // O teu email real
       subject: `New message from ${name}`,
-
-      // CORREÇÃO 1: Mudámos de 'reply_to' para 'replyTo' (camelCase)
       replyTo: email,
-
       text: `Name: ${name}\nEmail: ${email}\nMessage: ${message}`,
     });
 
     return { success: true, message: "Email sent successfully!" };
   } catch (error) {
-    // CORREÇÃO 2: Usamos a variável 'error' para fazer log no servidor
     console.error("Error sending email:", error);
     return { success: false, message: "Database Error: Failed to send email." };
   }
