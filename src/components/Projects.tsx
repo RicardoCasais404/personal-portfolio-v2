@@ -35,6 +35,7 @@ function ProjectCard({
 
   return (
     <div className="flex flex-col md:flex-row gap-12 md:gap-20 items-center">
+      {/* IMAGEM LINK */}
       <a
         href={project.link}
         target="_blank"
@@ -44,7 +45,8 @@ function ProjectCard({
           isEven ? "md:order-1" : "md:order-2"
         )}
       >
-        <span className="text-6xl text-[#26150f]/20 transition-transform duration-700 group-hover:scale-110 active:duration-0 active:scale-110">
+        {/* Adicionei 'group-active' e 'group-focus' para o zoom funcionar no toque */}
+        <span className="text-6xl text-[#26150f]/20 transition-transform duration-700 group-hover:scale-110 group-active:scale-110 group-focus:scale-110">
           ❖
         </span>
       </a>
@@ -65,7 +67,7 @@ function ProjectCard({
           {project.description}
         </p>
 
-        {/* TAGS (BOTÕES DE TECNOLOGIA) */}
+        {/* TAGS (Interativas) */}
         <div
           className={cn(
             "flex flex-wrap gap-3 mb-10",
@@ -76,32 +78,34 @@ function ProjectCard({
           {project.tags.map((tag) => (
             <span
               key={tag}
-              // AQUI ESTÁ A CORREÇÃO MOBILE:
-              // cursor-pointer: Diz ao telemóvel que é clicável.
-              // active:bg... active:text...: Muda a cor ao tocar.
-              // active:duration-0: A mudança é INSTANTÂNEA (sem lag).
-              className="px-3 py-1 text-xs font-bold border border-[#26150f] text-[#26150f] uppercase tracking-wider transition-colors cursor-pointer hover:bg-[#26150f] hover:text-[#d9d9d9] active:bg-[#26150f] active:text-[#d9d9d9] active:duration-0"
+              // AQUI ESTÁ A LÓGICA DE FOCO:
+              // tabIndex={0}: Permite focar.
+              // focus:bg... focus:text...: Mantém a cor preta depois de tocar.
+              tabIndex={0}
+              className="px-3 py-1 text-xs font-bold border border-[#26150f] text-[#26150f] uppercase tracking-wider transition-colors cursor-pointer outline-none hover:bg-[#26150f] hover:text-[#d9d9d9] focus:bg-[#26150f] focus:text-[#d9d9d9]"
             >
               {tag}
             </span>
           ))}
         </div>
 
+        {/* BOTÃO */}
         <div className="w-full">
           <a
             href={project.link}
             target="_blank"
             rel="noopener noreferrer"
             className={cn(
-              "group relative flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-[#26150f] pb-3 w-full",
+              "group relative flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-[#26150f] pb-3 w-full outline-none",
               "justify-start",
               !isEven && "md:justify-end"
             )}
           >
             View Project
+            {/* Adicionei group-focus:w-0 para a linha também reagir ao foco do link */}
             <span
               className={cn(
-                "absolute bottom-0 h-0.5 w-full bg-[#26150f] transition-all duration-300 active:duration-0 group-hover:w-0 group-active:w-0",
+                "absolute bottom-0 h-0.5 w-full bg-[#26150f] transition-all duration-300 group-hover:w-0 group-focus:w-0 group-active:w-0",
                 "left-0",
                 !isEven && "md:right-0 md:left-auto"
               )}
