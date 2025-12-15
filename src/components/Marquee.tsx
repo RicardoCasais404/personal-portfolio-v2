@@ -7,9 +7,9 @@ export function Marquee() {
   const loopItems = [...items, ...items];
 
   return (
-    // ALTERAÇÃO:
-    // hidden: Escondido por defeito (telemóvel).
-    // md:block: Visível a partir de ecrãs médios (desktop/tablet).
+    // AQUI ESTÁ O SEGREDO:
+    // 'hidden': Display none por defeito (Telemóvel).
+    // 'md:block': Display block a partir de 768px (Tablet/PC).
     <div className="hidden md:block w-full overflow-hidden py-0.5 bg-[#d9d9d9]">
       <div className="relative flex w-1/3 mx-auto overflow-hidden mask-[linear-gradient(to_right,transparent,black_20%,black_80%,transparent)]">
         <motion.div
