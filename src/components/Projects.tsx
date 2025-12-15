@@ -8,16 +8,15 @@ export function Projects() {
   return (
     <SectionWrapper
       id="projects"
-      // Padding lateral e vertical ajustado
       className="relative w-full min-h-screen py-12 px-6 md:px-12 md:py-32 bg-[#d9d9d9] flex flex-col justify-center"
     >
       <div className="w-full max-w-[1200px] mx-auto">
-        {/* TÍTULO: mb-12 (Mobile) / md:mb-32 (Desktop) */}
+        {/* TÍTULO */}
         <h2 className="mb-12 md:mb-32 text-center text-[clamp(2.5rem,8vw,5rem)] font-extrabold uppercase leading-[0.9] tracking-normal text-[#26150f]">
           {projectsData.title}
         </h2>
 
-        {/* GAP: gap-20 (Mobile) / md:gap-40 (Desktop) */}
+        {/* LISTA */}
         <div className="flex flex-col gap-20 md:gap-40">
           {projectsData.items.map((project, index) => (
             <ProjectCard key={index} project={project} index={index} />
@@ -28,7 +27,6 @@ export function Projects() {
   );
 }
 
-// O ProjectCard mantém-se igual (já tem lógica de flex-col vs md:flex-row)
 function ProjectCard({
   project,
   index,
@@ -37,11 +35,14 @@ function ProjectCard({
   index: number;
 }) {
   const isEven = index % 2 === 0;
+
   return (
     <div className="flex flex-col md:flex-row gap-12 md:gap-20 items-center">
+      {/* IMAGEM */}
       <div
         className={cn(
           "w-full md:w-1/2 aspect-video bg-[#26150f]/5 flex items-center justify-center border border-[#26150f]/10 relative overflow-hidden group",
+          // Desktop: Alterna ordem. Mobile: Imagem sempre primeiro.
           isEven ? "md:order-1" : "md:order-2"
         )}
       >
@@ -49,24 +50,35 @@ function ProjectCard({
           ❖
         </span>
       </div>
+
+      {/* TEXTO */}
       <div
         className={cn(
           "w-full md:w-1/2 flex flex-col",
+          // MOBILE (Base): items-start, text-left (Sempre à esquerda)
+          "items-start text-left",
+          // DESKTOP (md): Aplica zig-zag
           isEven
             ? "md:order-2 md:text-left"
-            : "md:order-1 md:text-right items-end"
+            : "md:order-1 md:text-right md:items-end"
         )}
       >
         <h3 className="text-3xl font-bold uppercase text-[#26150f] mb-6 leading-none">
           {project.title}
         </h3>
+
         <p className="text-lg leading-relaxed text-[#26150f] font-normal mb-8 max-w-[40ch]">
           {project.description}
         </p>
+
+        {/* TAGS */}
         <div
           className={cn(
             "flex flex-wrap gap-3 mb-10",
-            isEven ? "justify-start" : "justify-end"
+            // MOBILE: justify-start (Sempre esquerda)
+            "justify-start",
+            // DESKTOP: Alterna
+            !isEven && "md:justify-end"
           )}
         >
           {project.tags.map((tag) => (
@@ -78,6 +90,8 @@ function ProjectCard({
             </span>
           ))}
         </div>
+
+        {/* BOTÃO */}
         <div className="w-full">
           <a
             href={project.link}
@@ -85,14 +99,23 @@ function ProjectCard({
             rel="noopener noreferrer"
             className={cn(
               "group relative flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-[#26150f] pb-3 w-full",
-              isEven ? "justify-start" : "justify-end"
+              // MOBILE: justify-start
+              "justify-start",
+              // DESKTOP: Alterna
+              !isEven && "md:justify-end"
             )}
           >
             View Project
+            {/* LINHA ANIMADA */}
             <span
               className={cn(
                 "absolute bottom-0 h-0.5 w-full bg-[#26150f] transition-all duration-300 group-hover:w-0",
-                isEven ? "left-0" : "right-0"
+                // MOBILE: left-0 (Sempre ancora à esquerda)
+                "left-0",
+                // DESKTOP:
+                // Se for ímpar (!isEven), ancora à direita (md:right-0).
+                // Se for par (isEven), o left-0 base já serve.
+                !isEven && "md:right-0 md:left-auto"
               )}
             />
           </a>
