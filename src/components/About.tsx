@@ -8,9 +8,7 @@ export function About() {
   return (
     <SectionWrapper
       id="about"
-      // CORREÇÃO: pt-0 no mobile.
-      // Como o Hero tem min-h-screen, ele já empurra o About para baixo do ecrã.
-      // Não precisamos de mais espaço extra no topo do About.
+      // Mobile: pt-0 pb-12 | Desktop: md:py-32 (Original)
       className="relative min-h-screen pt-0 pb-12 px-6 md:px-12 md:py-32 bg-[#d9d9d9] flex flex-col justify-center"
     >
       <div className="w-full max-w-[1200px] mx-auto">

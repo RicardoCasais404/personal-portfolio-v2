@@ -9,11 +9,11 @@ export function Education() {
     <SectionWrapper
       id="education"
       enableY={false}
-      // py-12 (Mobile)
+      // py-12 (Mobile) / md:py-32 (Desktop)
       className="relative w-full min-h-screen py-12 px-6 md:px-12 md:py-32 bg-[#d9d9d9]"
     >
       <div className="w-full max-w-[1200px] mx-auto">
-        {/* TÍTULO: mb-12 (Mobile) vs mb-32 (Desktop) */}
+        {/* TÍTULO: mb-12 / md:mb-32 */}
         <div className="mb-12 md:mb-32 text-center">
           <h2 className="text-[#26150f] font-extrabold uppercase leading-[0.9] tracking-normal">
             <span className="block text-[clamp(2.5rem,8vw,5rem)]">
@@ -34,8 +34,7 @@ export function Education() {
           </h2>
         </div>
 
-        {/* ... (Resto do código da timeline mantém-se IGUAL) ... */}
-        {/* Copia o resto do código da timeline do teu ficheiro anterior ou do passo 43 */}
+        {/* ... Resto do código da timeline (Mantém-se igual, pois a lógica de track é a mesma) ... */}
         <div className="relative">
           <div className="absolute left-5 top-[55px] bottom-[150px] w-px md:left-1/2 md:-translate-x-1/2 bg-[#26150f]/30"></div>
           <div className="absolute left-5 top-[103px] bottom-[198px] w-px md:left-1/2 md:-translate-x-1/2 z-10 pointer-events-none">
@@ -70,7 +69,7 @@ export function Education() {
   );
 }
 
-// Sub-componentes (iguais aos anteriores)
+// ... Sub-componentes TimelineHeader e TimelineBody (iguais) ...
 function TimelineHeader({
   item,
   align,

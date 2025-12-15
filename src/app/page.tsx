@@ -12,24 +12,31 @@ export default function Home() {
     <main className="flex min-h-screen flex-col items-center justify-between bg-[#d9d9d9]">
       <Hero />
 
-      {/* Container Principal */}
-      <div className="w-full flex flex-col">
-        {/* 1. ABOUT */}
+      {/*
+         CONTAINER PRINCIPAL
+         Mobile: gap-16 (Apertado)
+         Desktop: md:gap-32 (O original espaçoso)
+      */}
+      <div className="w-full flex flex-col gap-16 md:gap-32">
         <About />
 
-        {/* 2. PROJECTS */}
-        <Marquee />
-        <Projects />
+        {/* 1. PROJECTS (Agora em primeiro) */}
+        <div className="w-full flex flex-col">
+          <Marquee />
+          <Projects />
+        </div>
 
-        {/* 3. EDUCATION */}
-        <Marquee />
-        <Education />
+        {/* 2. EDUCATION (Agora em segundo) */}
+        <div className="w-full flex flex-col">
+          <Marquee />
+          <Education />
+        </div>
 
-        {/* 4. SKILLS */}
-        <Marquee />
-        <Skills />
+        <div className="w-full flex flex-col">
+          <Marquee />
+          <Skills />
+        </div>
 
-        {/* 5. CONTACTO + FOOTER */}
         <div className="w-full flex flex-col snap-start min-h-screen">
           <Marquee />
           <div className="flex-1 flex flex-col justify-center">

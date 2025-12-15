@@ -37,37 +37,43 @@ export function Hero() {
   const containerRef = useRef(null);
   const { scrollY } = useScroll();
 
-  const y = useTransform(scrollY, [0, 500], [0, 100]);
+  const y = useTransform(scrollY, [0, 500], [0, 150]);
+
+  // Mobile: Fade out rápido (300px) para evitar harsh line.
   const opacity = useTransform(scrollY, [0, 300], [1, 0]);
 
   return (
     <section
       id="hero"
       ref={containerRef}
-      // Mantemos o alinhamento.
       className="relative flex min-h-screen w-full items-center px-6 pt-20 md:px-12 md:pt-0"
     >
-      <div className="w-full max-w-[1200px] mx-auto mask-[linear-gradient(to_bottom,black_80%,transparent_100%)]">
+      {/*
+         MÁSCARA:
+         Mobile: black_80% (Fade cedo para evitar linha dura)
+         Desktop: md:...black_95% (Fade original subtil)
+      */}
+      <div className="w-full max-w-[1200px] mx-auto mask-[linear-gradient(to_bottom,black_80%,transparent_100%)] md:mask-[linear-gradient(to_bottom,black_95%,transparent_100%)]">
         <motion.div
           initial="hidden"
           animate="visible"
           variants={containerVariants}
           style={{ y, opacity }}
-          // CORREÇÃO ESPAÇO: Reduzi pb-20 para pb-4.
-          // Isto remove o espaço morto debaixo do texto.
-          className="flex flex-col items-start pb-4"
+          // Mobile: pb-4 (Apertado) | Desktop: md:pb-10 (Original)
+          className="flex flex-col items-start pb-4 md:pb-10"
         >
           {/*
-             CORREÇÃO TEXTO:
-             Aumentei 10vw para 15vw. O texto vai crescer horizontalmente e verticalmente.
-             Aumentei o mínimo de 2.2rem para 3rem.
+             TIPOGRAFIA:
+             Mobile: text-[13vw] (Enche a largura)
+             Desktop: md:text-[clamp(...)] (VOLTA AO ORIGINAL EXATO)
           */}
-          <h1 className="flex flex-col items-start w-full text-[clamp(3rem,15vw,9rem)] font-bold leading-[1.1] tracking-normal text-[#26150f]">
+          <h1 className="flex flex-col items-start w-full text-[13vw] md:text-[clamp(2.2rem,10vw,8rem)] font-bold leading-[1.1] tracking-normal text-[#26150f]">
             <div className="w-full">
               <motion.div variants={slideVariants} className="block">
                 FULL-STACK
               </motion.div>
             </div>
+
             <motion.div
               variants={slideVariants}
               className="flex items-center gap-[0.25em] w-full md:ml-[4%]"
@@ -94,16 +100,19 @@ export function Hero() {
                 </svg>
               </motion.div>
             </motion.div>
+
             <div className="w-full">
               <motion.div variants={slideVariants} className="block">
                 & CREATIVE SOLUTIONS.
               </motion.div>
             </div>
           </h1>
+
           <div className="mt-6 md:mt-8">
+            {/* Tagline: Maior no mobile, original no desktop */}
             <motion.div
               variants={slideVariants}
-              className="text-[clamp(1rem,3vw,1.5rem)] font-bold uppercase tracking-[-0.08em]"
+              className="text-[4vw] md:text-[clamp(1rem,3vw,1.5rem)] font-bold uppercase tracking-[-0.08em]"
             >
               <span className="font-light">RICARDO</span>CASAIS
               <span className="font-light">404</span>

@@ -8,15 +8,16 @@ export function Projects() {
   return (
     <SectionWrapper
       id="projects"
+      // Padding lateral e vertical ajustado
       className="relative w-full min-h-screen py-12 px-6 md:px-12 md:py-32 bg-[#d9d9d9] flex flex-col justify-center"
     >
       <div className="w-full max-w-[1200px] mx-auto">
-        {/* TÍTULO: mb-12 (Mobile) vs md:mb-32 (Desktop) */}
+        {/* TÍTULO: mb-12 (Mobile) / md:mb-32 (Desktop) */}
         <h2 className="mb-12 md:mb-32 text-center text-[clamp(2.5rem,8vw,5rem)] font-extrabold uppercase leading-[0.9] tracking-normal text-[#26150f]">
           {projectsData.title}
         </h2>
 
-        {/* LISTA: gap-20 (Mobile) vs md:gap-40 (Desktop) */}
+        {/* GAP: gap-20 (Mobile) / md:gap-40 (Desktop) */}
         <div className="flex flex-col gap-20 md:gap-40">
           {projectsData.items.map((project, index) => (
             <ProjectCard key={index} project={project} index={index} />
@@ -27,7 +28,7 @@ export function Projects() {
   );
 }
 
-// ... (ProjectCard mantém-se igual, copia do ficheiro anterior ou mantém o que lá está)
+// O ProjectCard mantém-se igual (já tem lógica de flex-col vs md:flex-row)
 function ProjectCard({
   project,
   index,
