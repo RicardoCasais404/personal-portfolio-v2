@@ -40,16 +40,16 @@ export function Skills() {
             <motion.span
               key={index}
               variants={itemVariants}
-              // DESKTOP HOVER:
-              whileHover={{ opacity: 1, scale: 1.1 }}
+              // ESTADOS DE INTERAÇÃO (Geridos pelo Framer Motion):
+              whileHover={{ opacity: 1, scale: 1.1 }} // Desktop (Rato)
+              whileTap={{ opacity: 1, scale: 1.1 }} // Mobile (Toque imediato)
+              whileFocus={{ opacity: 1, scale: 1.1 }} // Mobile (Mantém ativo após o toque)
               transition={{ duration: 0.3 }}
-              // TORNA FOCÁVEL:
+              // tabIndex={0} torna o elemento "focável" pelo teclado ou toque
               tabIndex={0}
-              // INTERAÇÃO HÍBRIDA (MOBILE & ACESSIBILIDADE):
-              // cursor-pointer: Indica clique.
-              // focus:opacity-100 focus:scale-110: Mantém o efeito ativo depois do clique/toque.
-              // focus:outline-none: Remove a borda azul padrão do browser.
-              className="cursor-pointer text-[clamp(1.8rem,6.5vw,3.8rem)] font-extrabold uppercase text-[#26150f] transition-all duration-300 outline-none hover:opacity-100 focus:opacity-100 focus:scale-110"
+              // Classes CSS limpas (removemos os focus: e active: do Tailwind)
+              // outline-none remove a borda azul padrão do browser
+              className="cursor-pointer text-[clamp(1.8rem,6.5vw,3.8rem)] font-extrabold uppercase text-[#26150f] outline-none"
             >
               {skill}
             </motion.span>
