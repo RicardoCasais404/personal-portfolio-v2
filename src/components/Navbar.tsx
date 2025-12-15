@@ -8,8 +8,8 @@ import { useSmoothScroll } from "@/components/SmoothScroll";
 
 const navItems = [
   { name: "About", href: "#about" },
-  { name: "Education", href: "#education" },
   { name: "Projects", href: "#projects" },
+  { name: "Education", href: "#education" },
   { name: "Skills", href: "#skills" },
   { name: "Contact", href: "#contact" },
 ];
