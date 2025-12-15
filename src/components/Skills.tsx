@@ -22,11 +22,9 @@ export function Skills() {
   return (
     <SectionWrapper
       id="skills"
-      // py-12 / md:py-32
       className="relative w-full min-h-screen py-12 px-6 md:px-12 md:py-32 bg-[#d9d9d9] flex flex-col justify-center items-center"
     >
       <div className="w-full max-w-[1200px] mx-auto text-center">
-        {/* TÍTULO: mb-12 / md:mb-20 */}
         <h2 className="mb-12 md:mb-20 text-[clamp(2.5rem,8vw,5rem)] font-extrabold uppercase leading-[0.9] tracking-normal text-[#26150f]">
           {skillsData.title}
         </h2>
@@ -42,7 +40,9 @@ export function Skills() {
             <motion.span
               key={index}
               variants={itemVariants}
+              // MUDANÇA: Adicionei whileTap (Mobile) igual ao whileHover (Desktop)
               whileHover={{ opacity: 1, scale: 1.1 }}
+              whileTap={{ opacity: 1, scale: 1.1 }}
               transition={{ duration: 0.3 }}
               className="cursor-default text-[clamp(1.8rem,6.5vw,3.8rem)] font-extrabold uppercase text-[#26150f]"
             >

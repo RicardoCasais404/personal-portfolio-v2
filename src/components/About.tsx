@@ -8,7 +8,6 @@ export function About() {
   return (
     <SectionWrapper
       id="about"
-      // Mobile: pt-0 pb-12 | Desktop: md:py-32 (Original)
       className="relative min-h-screen pt-0 pb-12 px-6 md:px-12 md:py-32 bg-[#d9d9d9] flex flex-col justify-center"
     >
       <div className="w-full max-w-[1200px] mx-auto">
@@ -40,10 +39,12 @@ export function About() {
                   href={social.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group relative pb-[5px] text-base font-semibold text-[#26150f] transition-opacity duration-300 hover:opacity-70"
+                  // INTERAÇÃO MOBILE: active:opacity-70
+                  className="group relative pb-[5px] text-base font-semibold text-[#26150f] transition-opacity duration-300 hover:opacity-70 active:opacity-70"
                 >
                   {social.name}
-                  <span className="absolute bottom-0 left-0 h-px w-full bg-[#26150f] transition-all duration-300 group-hover:w-0" />
+                  {/* INTERAÇÃO MOBILE: group-active:w-0 (Linha desaparece ao tocar) */}
+                  <span className="absolute bottom-0 left-0 h-px w-full bg-[#26150f] transition-all duration-300 group-hover:w-0 group-active:w-0" />
                 </a>
               ))}
             </div>

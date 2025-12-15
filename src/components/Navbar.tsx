@@ -36,7 +36,6 @@ export function Navbar() {
         "md:h-screen md:w-[100px] md:flex-col md:border-b-0 md:border-r md:py-10 md:px-0 md:justify-between md:gap-0"
       )}
     >
-      {/* 1. LOGÓTIPO */}
       <Link
         href="#hero"
         aria-label="Voltar ao topo"
@@ -46,25 +45,11 @@ export function Navbar() {
         <Logo className="h-8 w-auto transition-transform duration-500 hover:rotate-90 md:h-9" />
       </Link>
 
-      {/* WRAPPER DA NAVEGAÇÃO */}
       <div className="flex-1 relative overflow-hidden md:overflow-visible md:w-full md:flex-1 md:flex md:flex-col md:items-center md:justify-center">
-        {/* 2. LINKS DE NAVEGAÇÃO */}
         <nav
           className={cn(
             "flex items-center",
-
-            // --- MOBILE ---
-            "flex-row w-full overflow-x-auto no-scrollbar gap-6",
-
-            // AQUI ESTÁ A CORREÇÃO:
-            // Aumentei de pr-12 para pr-32 (128px).
-            // A seta tem w-28 (112px).
-            // Como 128 > 112, o último link vai conseguir passar totalmente a zona da seta.
-            "pr-32",
-
-            "mask-[linear-gradient(to_right,black_85%,transparent_100%)]",
-
-            // --- DESKTOP (Bloqueado) ---
+            "flex-row w-full overflow-x-auto no-scrollbar gap-6 pr-32 mask-[linear-gradient(to_right,black_85%,transparent_100%)]",
             "md:w-auto md:flex-col md:gap-10 md:overflow-visible md:pr-0 md:mask-none"
           )}
         >
@@ -91,7 +76,12 @@ export function Navbar() {
                   className={cn(
                     "absolute bg-[#26150f] transition-all duration-300 ease-out",
                     "-bottom-2 left-0 h-[0.5px]",
-                    isActive ? "w-full" : "w-0 group-hover:w-full",
+                    // MUDANÇA: Adicionei group-active:w-full
+                    // Quando tocas (active), a linha enche, tal como no hover.
+                    isActive
+                      ? "w-full"
+                      : "w-0 group-hover:w-full group-active:w-full",
+
                     "md:left-auto",
                     "md:bottom-0 md:top-auto",
                     "md:-right-1",
@@ -104,7 +94,6 @@ export function Navbar() {
           })}
         </nav>
 
-        {/* 3. INDICADOR VISUAL (SETA) - APENAS MOBILE */}
         <div className="absolute top-0 right-0 h-full flex items-center justify-end w-28 bg-linear-to-l from-[#d9d9d9] via-[#d9d9d9] to-transparent pointer-events-none md:hidden">
           <svg
             xmlns="http://www.w3.org/2000/svg"

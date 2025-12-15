@@ -1,7 +1,7 @@
 "use client";
 
-import { useFormState, useFormStatus } from "react-dom";
-// REMOVIDO: import { motion } ... (Já não é necessário aqui)
+import { useActionState } from "react";
+import { useFormStatus } from "react-dom";
 import { contactData } from "@/data/content";
 import { sendEmail } from "@/actions/send-email";
 import { SectionWrapper } from "@/components/SectionWrapper";
@@ -13,7 +13,8 @@ function SubmitButton() {
     <button
       type="submit"
       disabled={pending}
-      className="w-full px-8 py-4 bg-[#26150f] text-[#d9d9d9] text-base font-bold uppercase tracking-wider border-2 border-[#26150f] transition-all duration-300 hover:bg-transparent hover:text-[#26150f] disabled:opacity-50 disabled:cursor-not-allowed"
+      // INTERAÇÃO MOBILE: active:bg-transparent active:text-[#26150f]
+      className="w-full px-8 py-4 bg-[#26150f] text-[#d9d9d9] text-base font-bold uppercase tracking-wider border-2 border-[#26150f] transition-all duration-300 hover:bg-transparent hover:text-[#26150f] active:bg-transparent active:text-[#26150f] disabled:opacity-50 disabled:cursor-not-allowed"
     >
       {pending ? "Sending..." : "Send Message"}
     </button>
@@ -21,7 +22,7 @@ function SubmitButton() {
 }
 
 export function Contact() {
-  const [state, formAction] = useFormState(sendEmail, {
+  const [state, formAction] = useActionState(sendEmail, {
     success: false,
     message: "",
   });
@@ -33,7 +34,6 @@ export function Contact() {
     >
       <div className="w-full max-w-[1200px] mx-auto">
         <div className="flex flex-col md:flex-row gap-16 md:gap-24">
-          {/* LADO ESQUERDO */}
           <div className="w-full md:w-1/2">
             <h2 className="text-[clamp(2.5rem,6vw,4rem)] font-extrabold uppercase leading-[1.1] text-[#26150f] mb-6">
               {contactData.title}
@@ -51,13 +51,13 @@ export function Contact() {
                   className="group relative pb-1 text-base font-bold text-[#26150f] uppercase tracking-wide"
                 >
                   {social.name}
-                  <span className="absolute bottom-0 left-0 h-px w-full bg-[#26150f] transition-all duration-300 group-hover:w-0" />
+                  {/* INTERAÇÃO MOBILE: group-active:w-0 */}
+                  <span className="absolute bottom-0 left-0 h-px w-full bg-[#26150f] transition-all duration-300 group-hover:w-0 group-active:w-0" />
                 </a>
               ))}
             </div>
           </div>
 
-          {/* LADO DIREITO (FORMULÁRIO) */}
           <div className="w-full md:w-1/2">
             <form action={formAction} className="flex flex-col gap-6">
               <div className="flex flex-col gap-2">
