@@ -37,9 +37,9 @@ export function Hero() {
   const containerRef = useRef(null);
   const { scrollY } = useScroll();
 
-  const y = useTransform(scrollY, [0, 500], [0, 150]);
+  const y = useTransform(scrollY, [0, 500], [0, 100]);
 
-  // Mobile: Fade out rápido (300px) para evitar harsh line.
+  // Fade out rápido no mobile
   const opacity = useTransform(scrollY, [0, 300], [1, 0]);
 
   return (
@@ -49,25 +49,27 @@ export function Hero() {
       className="relative flex min-h-screen w-full items-center px-6 pt-20 md:px-12 md:pt-0"
     >
       {/*
-         MÁSCARA:
-         Mobile: black_80% (Fade cedo para evitar linha dura)
-         Desktop: md:...black_95% (Fade original subtil)
+         MÁSCARA MOBILE AJUSTADA:
+         black_85%: A transparência começa mais tarde (nos últimos 15%).
+         Isto, combinado com o padding abaixo, salva a tagline.
       */}
-      <div className="w-full max-w-[1200px] mx-auto mask-[linear-gradient(to_bottom,black_80%,transparent_100%)] md:mask-[linear-gradient(to_bottom,black_95%,transparent_100%)]">
+      <div className="w-full max-w-[1200px] mx-auto mask-[linear-gradient(to_bottom,black_85%,transparent_100%)] md:mask-[linear-gradient(to_bottom,black_95%,transparent_100%)]">
         <motion.div
           initial="hidden"
           animate="visible"
           variants={containerVariants}
           style={{ y, opacity }}
-          // Mobile: pb-4 (Apertado) | Desktop: md:pb-10 (Original)
-          className="flex flex-col items-start pb-4 md:pb-10"
+          // PADDING MOBILE AUMENTADO:
+          // pb-12 (48px): Empurra o texto para cima, tirando a tagline da zona de perigo do gradiente.
+          // md:pb-10: Mantém o desktop igual.
+          className="flex flex-col items-start pb-12 md:pb-10"
         >
           {/*
-             TIPOGRAFIA:
-             Mobile: text-[13vw] (Enche a largura)
-             Desktop: md:text-[clamp(...)] (VOLTA AO ORIGINAL EXATO)
+             TAMANHO DA FONTE MOBILE AJUSTADO:
+             text-[11.5vw]: Reduzi de 13vw.
+             Isto garante que "DEVELOPMENT" cabe na largura do iPhone/Android sem cortar.
           */}
-          <h1 className="flex flex-col items-start w-full text-[13vw] md:text-[clamp(2.2rem,10vw,8rem)] font-bold leading-[1.1] tracking-normal text-[#26150f]">
+          <h1 className="flex flex-col items-start w-full text-[11.5vw] md:text-[clamp(2.2rem,10vw,8rem)] font-bold leading-[1.1] tracking-normal text-[#26150f]">
             <div className="w-full">
               <motion.div variants={slideVariants} className="block">
                 FULL-STACK
@@ -109,10 +111,10 @@ export function Hero() {
           </h1>
 
           <div className="mt-6 md:mt-8">
-            {/* Tagline: Maior no mobile, original no desktop */}
+            {/* Tagline ajustada proporcionalmente */}
             <motion.div
               variants={slideVariants}
-              className="text-[4vw] md:text-[clamp(1rem,3vw,1.5rem)] font-bold uppercase tracking-[-0.08em]"
+              className="text-[3.5vw] md:text-[clamp(1rem,3vw,1.5rem)] font-bold uppercase tracking-[-0.08em]"
             >
               <span className="font-light">RICARDO</span>CASAIS
               <span className="font-light">404</span>
