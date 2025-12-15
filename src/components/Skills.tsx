@@ -40,16 +40,16 @@ export function Skills() {
             <motion.span
               key={index}
               variants={itemVariants}
-              // ESTADOS DE INTERAÇÃO (Geridos pelo Framer Motion):
-              whileHover={{ opacity: 1, scale: 1.1 }} // Desktop (Rato)
-              whileTap={{ opacity: 1, scale: 1.1 }} // Mobile (Toque imediato)
-              whileFocus={{ opacity: 1, scale: 1.1 }} // Mobile (Mantém ativo após o toque)
+              // ESTADOS:
+              whileHover={{ opacity: 1, scale: 1.1 }} // Desktop
+              whileFocus={{ opacity: 1, scale: 1.1 }} // Mobile (Fica ativo após toque)
+              // Removi whileTap para não haver conflito visual, o Focus trata de tudo.
+
               transition={{ duration: 0.3 }}
-              // tabIndex={0} torna o elemento "focável" pelo teclado ou toque
+              // ACESSIBILIDADE & MOBILE:
               tabIndex={0}
-              // Classes CSS limpas (removemos os focus: e active: do Tailwind)
-              // outline-none remove a borda azul padrão do browser
-              className="cursor-pointer text-[clamp(1.8rem,6.5vw,3.8rem)] font-extrabold uppercase text-[#26150f] outline-none"
+              onClick={() => {}} // <--- O TRUQUE PARA iOS (Permite o focus funcionar)
+              className="cursor-pointer text-[clamp(1.8rem,6.5vw,3.8rem)] font-extrabold uppercase text-[#26150f] outline-none select-none"
             >
               {skill}
             </motion.span>

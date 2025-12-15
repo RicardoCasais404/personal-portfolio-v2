@@ -35,7 +35,6 @@ function ProjectCard({
 
   return (
     <div className="flex flex-col md:flex-row gap-12 md:gap-20 items-center">
-      {/* IMAGEM LINK */}
       <a
         href={project.link}
         target="_blank"
@@ -45,7 +44,6 @@ function ProjectCard({
           isEven ? "md:order-1" : "md:order-2"
         )}
       >
-        {/* Adicionei 'group-active' e 'group-focus' para o zoom funcionar no toque */}
         <span className="text-6xl text-[#26150f]/20 transition-transform duration-700 group-hover:scale-110 group-active:scale-110 group-focus:scale-110">
           ❖
         </span>
@@ -67,7 +65,7 @@ function ProjectCard({
           {project.description}
         </p>
 
-        {/* TAGS (Interativas) */}
+        {/* TAGS INTERATIVAS */}
         <div
           className={cn(
             "flex flex-wrap gap-3 mb-10",
@@ -78,10 +76,8 @@ function ProjectCard({
           {project.tags.map((tag) => (
             <span
               key={tag}
-              // AQUI ESTÁ A LÓGICA DE FOCO:
-              // tabIndex={0}: Permite focar.
-              // focus:bg... focus:text...: Mantém a cor preta depois de tocar.
               tabIndex={0}
+              onClick={() => {}} // <--- O TRUQUE PARA iOS
               className="px-3 py-1 text-xs font-bold border border-[#26150f] text-[#26150f] uppercase tracking-wider transition-colors cursor-pointer outline-none hover:bg-[#26150f] hover:text-[#d9d9d9] focus:bg-[#26150f] focus:text-[#d9d9d9]"
             >
               {tag}
@@ -89,7 +85,6 @@ function ProjectCard({
           ))}
         </div>
 
-        {/* BOTÃO */}
         <div className="w-full">
           <a
             href={project.link}
@@ -102,7 +97,6 @@ function ProjectCard({
             )}
           >
             View Project
-            {/* Adicionei group-focus:w-0 para a linha também reagir ao foco do link */}
             <span
               className={cn(
                 "absolute bottom-0 h-0.5 w-full bg-[#26150f] transition-all duration-300 group-hover:w-0 group-focus:w-0 group-active:w-0",
