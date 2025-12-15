@@ -40,11 +40,15 @@ export function Skills() {
             <motion.span
               key={index}
               variants={itemVariants}
-              // MUDANÇA: Adicionei whileTap (Mobile) igual ao whileHover (Desktop)
+              // DESKTOP:
               whileHover={{ opacity: 1, scale: 1.1 }}
-              whileTap={{ opacity: 1, scale: 1.1 }}
               transition={{ duration: 0.3 }}
-              className="cursor-default text-[clamp(1.8rem,6.5vw,3.8rem)] font-extrabold uppercase text-[#26150f]"
+              // MOBILE (CSS Puro para velocidade máxima):
+              // cursor-pointer: Diz ao telemóvel "isto é um botão".
+              // active:opacity-100: Acende logo.
+              // active:scale-110: Aumenta logo.
+              // active:duration-0: Sem espera.
+              className="cursor-pointer text-[clamp(1.8rem,6.5vw,3.8rem)] font-extrabold uppercase text-[#26150f] transition-all duration-300 active:opacity-100 active:scale-110 active:duration-0"
             >
               {skill}
             </motion.span>

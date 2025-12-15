@@ -35,18 +35,19 @@ function ProjectCard({
 
   return (
     <div className="flex flex-col md:flex-row gap-12 md:gap-20 items-center">
-      {/* IMAGEM ZOOM */}
-      <div
+      <a
+        href={project.link}
+        target="_blank"
+        rel="noopener noreferrer"
         className={cn(
-          "w-full md:w-1/2 aspect-video bg-[#26150f]/5 flex items-center justify-center border border-[#26150f]/10 relative overflow-hidden group",
+          "w-full md:w-1/2 aspect-video bg-[#26150f]/5 flex items-center justify-center border border-[#26150f]/10 relative overflow-hidden group cursor-pointer",
           isEven ? "md:order-1" : "md:order-2"
         )}
       >
-        {/* Adicionei group-active:scale-110 para zoom no toque */}
-        <span className="text-6xl text-[#26150f]/20 transition-transform duration-700 group-hover:scale-110 group-active:scale-110">
+        <span className="text-6xl text-[#26150f]/20 transition-transform duration-700 group-hover:scale-110 active:duration-0 active:scale-110">
           ❖
         </span>
-      </div>
+      </a>
 
       <div
         className={cn(
@@ -64,6 +65,7 @@ function ProjectCard({
           {project.description}
         </p>
 
+        {/* TAGS (BOTÕES DE TECNOLOGIA) */}
         <div
           className={cn(
             "flex flex-wrap gap-3 mb-10",
@@ -74,14 +76,17 @@ function ProjectCard({
           {project.tags.map((tag) => (
             <span
               key={tag}
-              className="px-3 py-1 text-xs font-bold border border-[#26150f] text-[#26150f] uppercase tracking-wider hover:bg-[#26150f] hover:text-[#d9d9d9] transition-colors cursor-default"
+              // AQUI ESTÁ A CORREÇÃO MOBILE:
+              // cursor-pointer: Diz ao telemóvel que é clicável.
+              // active:bg... active:text...: Muda a cor ao tocar.
+              // active:duration-0: A mudança é INSTANTÂNEA (sem lag).
+              className="px-3 py-1 text-xs font-bold border border-[#26150f] text-[#26150f] uppercase tracking-wider transition-colors cursor-pointer hover:bg-[#26150f] hover:text-[#d9d9d9] active:bg-[#26150f] active:text-[#d9d9d9] active:duration-0"
             >
               {tag}
             </span>
           ))}
         </div>
 
-        {/* BOTÃO */}
         <div className="w-full">
           <a
             href={project.link}
@@ -94,10 +99,9 @@ function ProjectCard({
             )}
           >
             View Project
-            {/* LINHA: Adicionei group-active:w-0 (Encolhe no toque) */}
             <span
               className={cn(
-                "absolute bottom-0 h-0.5 w-full bg-[#26150f] transition-all duration-300 group-hover:w-0 group-active:w-0",
+                "absolute bottom-0 h-0.5 w-full bg-[#26150f] transition-all duration-300 active:duration-0 group-hover:w-0 group-active:w-0",
                 "left-0",
                 !isEven && "md:right-0 md:left-auto"
               )}
