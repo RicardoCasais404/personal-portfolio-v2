@@ -1,10 +1,30 @@
 "use client";
 
+import { motion, useScroll, useTransform } from "framer-motion";
+import { useRef } from "react";
 import { educationData, type EducationItem } from "@/data/content";
 import { cn } from "@/lib/utils";
 import { SectionWrapper } from "@/components/SectionWrapper";
 
 export function Education() {
+  const containerRef = useRef(null);
+
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    // Começa quando o topo da lista toca no centro do ecrã.
+    // Acaba quando o fundo da lista toca no centro do ecrã.
+    offset: ["start center", "end center"],
+  });
+
+  // FÍSICA DO PONTO (Coordenadas Absolutas)
+  // 55px: Ponto de partida (alinhado com o texto "MULTIMEDIA TECHNIQUES")
+  // calc(100% - 50px): Ponto de chegada (alinhado com a descrição final)
+  const pointTop = useTransform(
+    scrollYProgress,
+    [0, 1],
+    ["55px", "calc(100% - 50px)"]
+  );
+
   return (
     <SectionWrapper
       id="education"
@@ -34,67 +54,44 @@ export function Education() {
         </div>
 
         {/*
-           TIMELINE CONTAINER (Relative)
-           Este div cresce com o conteúdo dos items.
+           TIMELINE CONTAINER (Ref aqui)
+           Este div define a altura total da viagem do ponto.
         */}
-        <div className="relative">
-          {/*
-             === SISTEMA DE PISTA (TRACK SYSTEM) ===
-             Posicionado de forma absoluta em relação à lista.
-             Mobile: left-[20px] | Desktop: left-1/2
-             inset-y-0: Ocupa a altura TOTAL da lista.
-          */}
-          <div className="absolute top-0 bottom-0 left-5 w-px md:left-1/2 md:-translate-x-1/2">
-            {/* 1. LINHA VISUAL (FUNDO) */}
-            {/* padding-y de 12px só para a linha não "furar" visualmente os limites */}
-            <div className="absolute inset-y-2 w-full bg-[#26150f]/30"></div>
+        <div ref={containerRef} className="relative">
+          {/* A LINHA (TRACK) */}
+          <div className="absolute left-5 top-0 bottom-0 w-px md:left-1/2 md:-translate-x-1/2 bg-[#26150f]/30"></div>
 
-            {/* 2. O CONTENTOR DO SÍMBOLO (COM PADDING) */}
-            {/*
-               py-[55px]: É AQUI QUE DEFINES O INÍCIO E FIM.
-               O símbolo só pode deslizar DENTRO deste padding.
-               55px = Alinha com o 1º título (aprox).
-            */}
-            <div className="absolute inset-0 py-[55px] pointer-events-none">
-              {/* Wrapper para o sticky ter altura para percorrer */}
-              <div className="h-full w-full relative">
-                {/*
-                     O PONTO STICKY
-                     sticky: Agarra-se ao ecrã.
-                     top-1/2: Fica no centro do ecrã.
-                  */}
-                <div className="sticky top-1/2 -translate-y-1/2 flex justify-center items-center">
-                  <span className="text-2xl text-[#26150f] leading-none bg-[#d9d9d9] px-0.5">
-                    ❖
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
+          {/* O PONTO ANIMADO (ABSOLUTO) */}
+          <motion.div
+            style={{ top: pointTop }}
+            className="absolute left-5 md:left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 flex justify-center"
+          >
+            <span className="text-2xl text-[#26150f] leading-none bg-[#d9d9d9] px-0.5">
+              ❖
+            </span>
+          </motion.div>
 
           {/* LISTA DE ITENS */}
-          {/* pt-12 (48px) para empurrar o texto para baixo, alinhando com os 55px da linha */}
+          {/* pt-12 (48px) + ajuste visual = 55px (Onde o ponto começa) */}
           <div className="flex flex-col gap-16 md:gap-24 pt-12 pb-12">
             {educationData.items.map((item, index) => {
               return (
                 <div
                   key={index}
                   className={cn(
-                    // Mobile: Flex (Esquerda)
-                    "relative flex flex-col pl-12",
-                    // Desktop: Grid (Esquerda/Direita)
-                    "md:grid md:grid-cols-[1fr_80px_1fr] md:items-start md:pl-0"
+                    "relative flex flex-col pl-12", // Mobile
+                    "md:grid md:grid-cols-[1fr_80px_1fr] md:items-start md:pl-0" // Desktop
                   )}
                 >
-                  {/* TÍTULO (Sempre Coluna 1) */}
+                  {/* TÍTULO */}
                   <div className="text-left md:col-start-1 md:text-right md:py-0">
                     <TimelineHeader item={item} />
                   </div>
 
-                  {/* VAZIO (Coluna 2) */}
+                  {/* VAZIO (Desktop) */}
                   <div className="hidden md:block md:col-start-2" />
 
-                  {/* DESCRIÇÃO (Sempre Coluna 3) */}
+                  {/* DESCRIÇÃO */}
                   <div className="mt-4 text-left md:col-start-3 md:mt-0 md:pt-16">
                     <TimelineBody item={item} />
                   </div>
