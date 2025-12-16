@@ -1,10 +1,27 @@
 "use client";
 
+import { motion, useScroll, useTransform } from "framer-motion";
+import { useRef } from "react";
 import { educationData, type EducationItem } from "@/data/content";
 import { cn } from "@/lib/utils";
 import { SectionWrapper } from "@/components/SectionWrapper";
 
 export function Education() {
+  // 1. Ref para o contentor da lista (onde a linha vive)
+  const listRef = useRef(null);
+
+  const { scrollYProgress } = useScroll({
+    target: listRef,
+    // TRUQUE DO MOVIMENTO:
+    // Começa quando o TOPO da lista toca no CENTRO do ecrã.
+    // Acaba quando o FUNDO da lista toca no CENTRO do ecrã.
+    // Resultado: O ponto parece "preso" ao centro do ecrã enquanto lês.
+    offset: ["start center", "end center"],
+  });
+
+  // Mapeamos o progresso (0 a 1) para a altura da linha (0% a 100%)
+  const pointTop = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
+
   return (
     <SectionWrapper
       id="education"
@@ -33,35 +50,33 @@ export function Education() {
           </h2>
         </div>
 
-        {/* TIMELINE CONTAINER */}
-        <div className="relative">
+        {/* TIMELINE CONTAINER (A LISTA) */}
+        <div ref={listRef} className="relative">
           {/*
-             CAMADA 1: A LINHA VISUAL (FUNDO)
-             - Mobile: left-[20px]
-             - Desktop: left-1/2
-             - top-[55px]: Começa alinhada com o 1º Título.
-             - bottom-0: Vai até ao fundo da lista (resolve o problema da linha curta).
+             A LINHA DE FUNDO (TRACK)
+             top-[0.6rem] -> Alinha com o topo das letras do 1º Título.
+             bottom-[0.6rem] -> Alinha com a base das letras da última Descrição.
+             Desta forma, a linha tem o tamanho EXATO do conteúdo de texto.
           */}
-          <div className="absolute left-5 top-[55px] bottom-0 w-px md:left-1/2 md:-translate-x-1/2 bg-[#26150f]/30"></div>
-
-          {/*
-             CAMADA 2: A PISTA DO SÍMBOLO (INVISIBLE TRACK)
-             - top-[55px]: Começa no mesmo sítio.
-             - bottom-[50px]: Acaba um pouco antes do fundo para o ponto não cair da linha visual.
-             - pointer-events-none: Para não bloquear cliques.
-          */}
-          <div className="absolute left-5 top-[55px] bottom-[50px] w-px md:left-1/2 md:-translate-x-1/2 z-10 pointer-events-none">
-            {/* O PONTO STICKY */}
-            <div className="sticky top-1/2 -translate-x-1/2 -translate-y-1/2 flex justify-center">
-              <span className="text-2xl text-[#26150f] leading-none bg-[#d9d9d9] px-0.5">
+          <div className="absolute left-5 top-[0.6rem] bottom-[0.6rem] w-px bg-[#26150f]/30 md:left-1/2 md:-translate-x-1/2">
+            {/* O PONTO ANIMADO */}
+            <motion.div
+              style={{ top: pointTop }}
+              className="absolute left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 flex justify-center"
+            >
+              {/* Símbolo com fundo para apagar a linha atrás dele */}
+              <span className="text-2xl text-[#26150f] leading-none bg-[#d9d9d9] px-px">
                 ❖
               </span>
-            </div>
+            </motion.div>
           </div>
 
-          {/* LISTA DE ITENS */}
-          {/* pt-12 (48px) + ajuste visual das fontes ≈ 55px (Início da linha) */}
-          <div className="flex flex-col gap-16 md:gap-20 pt-12 pb-12">
+          {/*
+             LISTA DE ITENS
+             Sem padding vertical extra no pai, para que a linha (absolute)
+             bata certo com o primeiro e último filho.
+          */}
+          <div className="flex flex-col gap-16 md:gap-24">
             {educationData.items.map((item, index) => {
               return (
                 <div
@@ -69,28 +84,38 @@ export function Education() {
                   className={cn(
                     // MOBILE: Flex Coluna, padding left para afastar da linha
                     "relative flex flex-col pl-12",
-                    // DESKTOP: Grid 3 colunas, remove padding left, items-start
+                    // DESKTOP: Grid 3 colunas
                     "md:grid md:grid-cols-[1fr_80px_1fr] md:items-start md:pl-0"
                   )}
                 >
-                  {/*
-                     COLUNA 1: CABEÇALHO (Título + Link)
-                     - Mobile: text-left
-                     - Desktop: text-right
-                  */}
-                  <div className="text-left md:text-right md:py-0">
+                  {/* COLUNA 1: CABEÇALHO */}
+                  <div
+                    className={cn(
+                      "text-left", // Mobile: Esquerda
+                      // Desktop: Alterna (Ímpar->Dir, Par->Esq)
+                      // Nota: index 0 é o primeiro.
+                      index % 2 === 0
+                        ? "md:col-start-1 md:text-right"
+                        : "md:col-start-3 md:text-left"
+                    )}
+                  >
                     <TimelineHeader item={item} />
                   </div>
 
                   {/* COLUNA 2: ESPAÇO CENTRAL (Vazio) */}
-                  <div className="hidden md:block" />
+                  <div className="hidden md:block md:col-start-2" />
 
-                  {/*
-                     COLUNA 3: DESCRIÇÃO
-                     - Mobile: mt-4 (Margem pequena entre link e descrição)
-                     - Desktop: pt-16 (Padding para criar efeito escada), text-left
-                  */}
-                  <div className="mt-4 text-left md:mt-0 md:pt-16">
+                  {/* COLUNA 3: DESCRIÇÃO */}
+                  <div
+                    className={cn(
+                      "mt-4 text-left", // Mobile: Margem topo
+                      "md:mt-0 md:pt-16", // Desktop: Padding topo (Escada)
+                      // Desktop: Coluna oposta ao cabeçalho
+                      index % 2 === 0
+                        ? "md:col-start-3 md:text-left"
+                        : "md:col-start-1 md:text-right"
+                    )}
+                  >
                     <TimelineBody item={item} />
                   </div>
                 </div>
@@ -103,20 +128,16 @@ export function Education() {
   );
 }
 
-// SUB-COMPONENTES (Simplificados para garantir alinhamento)
-
+// SUB-COMPONENTES
 function TimelineHeader({ item }: { item: EducationItem }) {
   return (
-    <div className="flex flex-col md:items-end">
-      {/* md:items-end força o alinhamento à direita no Desktop */}
-
-      <h3 className="text-2xl font-bold uppercase text-[#26150f] leading-tight text-left md:text-right">
+    <div className="flex flex-col">
+      <h3 className="text-2xl font-bold uppercase text-[#26150f] leading-tight">
         {item.title}
       </h3>
-      <span className="mt-2 text-base font-medium text-[#26150f] text-left md:text-right">
+      <span className="mt-2 text-base font-medium text-[#26150f]">
         {item.institution}
       </span>
-
       {item.link && (
         <a
           href={item.link.url}
