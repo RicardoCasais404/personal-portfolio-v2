@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import { useRef } from "react";
 import { educationData, type EducationItem } from "@/data/content";
 import { cn } from "@/lib/utils";
@@ -11,16 +11,25 @@ export function Education() {
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    // Começa quando o topo da lista toca no centro do ecrã.
-    // Acaba quando o fundo da lista toca no centro do ecrã.
+    // Trigger: Começa quando o topo da lista chega ao centro, acaba quando o fundo chega ao centro.
     offset: ["start center", "end center"],
   });
 
-  // FÍSICA DO PONTO (Coordenadas Absolutas)
-  // 55px: Ponto de partida (alinhado com o texto "MULTIMEDIA TECHNIQUES")
-  // calc(100% - 50px): Ponto de chegada (alinhado com a descrição final)
+  // 1. O AMORTECEDOR (PHYSICS)
+  // Isto elimina o aspeto "tremido" ou "pixel a pixel".
+  // O movimento torna-se fluido, ignorando os "soluços" do rato.
+  const smoothProgress = useSpring(scrollYProgress, {
+    stiffness: 100, // Rigidez (quanto menor, mais "preguiçoso")
+    damping: 30, // Atrito (para parar suavemente sem oscilar)
+    restDelta: 0.001,
+  });
+
+  // 2. O MAPEAMENTO
+  // Usamos o 'smoothProgress' em vez do valor bruto.
+  // 55px -> Início exato.
+  // calc(100% - 50px) -> Fim exato.
   const pointTop = useTransform(
-    scrollYProgress,
+    smoothProgress,
     [0, 1],
     ["55px", "calc(100% - 50px)"]
   );
@@ -53,15 +62,12 @@ export function Education() {
           </h2>
         </div>
 
-        {/*
-           TIMELINE CONTAINER (Ref aqui)
-           Este div define a altura total da viagem do ponto.
-        */}
+        {/* TIMELINE CONTAINER */}
         <div ref={containerRef} className="relative">
           {/* A LINHA (TRACK) */}
           <div className="absolute left-5 top-0 bottom-0 w-px md:left-1/2 md:-translate-x-1/2 bg-[#26150f]/30"></div>
 
-          {/* O PONTO ANIMADO (ABSOLUTO) */}
+          {/* O PONTO ANIMADO (Suave) */}
           <motion.div
             style={{ top: pointTop }}
             className="absolute left-5 md:left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 flex justify-center"
@@ -72,7 +78,6 @@ export function Education() {
           </motion.div>
 
           {/* LISTA DE ITENS */}
-          {/* pt-12 (48px) + ajuste visual = 55px (Onde o ponto começa) */}
           <div className="flex flex-col gap-16 md:gap-24 pt-12 pb-12">
             {educationData.items.map((item, index) => {
               return (
@@ -88,7 +93,7 @@ export function Education() {
                     <TimelineHeader item={item} />
                   </div>
 
-                  {/* VAZIO (Desktop) */}
+                  {/* VAZIO */}
                   <div className="hidden md:block md:col-start-2" />
 
                   {/* DESCRIÇÃO */}
