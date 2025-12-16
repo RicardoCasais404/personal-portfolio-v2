@@ -1,40 +1,10 @@
 "use client";
 
-import { motion, useScroll, useTransform, useSpring } from "framer-motion";
-import { useRef } from "react";
 import { educationData, type EducationItem } from "@/data/content";
 import { cn } from "@/lib/utils";
 import { SectionWrapper } from "@/components/SectionWrapper";
 
 export function Education() {
-  const listRef = useRef(null);
-
-  const { scrollYProgress } = useScroll({
-    target: listRef,
-    // Trigger: Começa quando o topo da lista chega ao centro, acaba quando o fundo chega ao centro.
-    offset: ["start center", "end center"],
-  });
-
-  // 1. SUAVIZAÇÃO (SMOOTHING)
-  // O useSpring cria uma "mola" virtual. O ponto segue o scroll mas com inércia.
-  // stiffness: 50 (baixo = movimento suave/preguiçoso)
-  // damping: 20 (amortecimento para não oscilar como gelatina)
-  const smoothProgress = useSpring(scrollYProgress, {
-    stiffness: 50,
-    damping: 20,
-    restDelta: 0.001,
-  });
-
-  // 2. FÍSICA DO PONTO (COM PADDING NA PISTA)
-  // A linha visual começa no 0 e acaba no 100%.
-  // Mas o ponto só viaja de '20px' até '100% - 20px'.
-  // Isto cria o padding no topo e no fundo que pediste.
-  const pointTop = useTransform(
-    smoothProgress,
-    [0, 1],
-    ["20px", "calc(100% - 20px)"]
-  );
-
   return (
     <SectionWrapper
       id="education"
@@ -64,56 +34,53 @@ export function Education() {
         </div>
 
         {/* TIMELINE CONTAINER */}
-        <div ref={listRef} className="relative">
+        <div className="relative">
           {/*
-             LINHA CENTRAL (VISUAL)
-             top-[0.6rem] / bottom-[0.6rem]: Alinha com as letras.
+             CAMADA 1: A LINHA VISUAL (COMPRIDA)
+             top-[0.6rem]: Começa no topo da letra.
+             bottom-[0.6rem]: Acaba na base da letra.
           */}
-          <div className="absolute left-5 top-[0.6rem] bottom-[0.6rem] w-px bg-[#26150f]/30 md:left-1/2 md:-translate-x-1/2">
-            {/* O PONTO ANIMADO */}
-            <motion.div
-              style={{ top: pointTop }}
-              className="absolute left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 flex justify-center"
-            >
-              <span className="text-2xl text-[#26150f] leading-none bg-[#d9d9d9] px-px">
+          <div className="absolute left-5 top-[0.6rem] bottom-[0.6rem] w-px md:left-1/2 md:-translate-x-1/2 bg-[#26150f]/30"></div>
+
+          {/*
+             CAMADA 2: A PISTA DO SÍMBOLO (CURTA = PADDING)
+             top-[2.6rem]: Começa 2rem (32px) ABAIXO do topo da linha.
+             bottom-[2.6rem]: Acaba 2rem (32px) ACIMA do fundo da linha.
+             Isto cria o "padding" físico. O símbolo sticky não consegue sair daqui.
+          */}
+          <div className="absolute left-5 top-[2.6rem] bottom-[2.6rem] w-px md:left-1/2 md:-translate-x-1/2 z-10 pointer-events-none">
+            {/* O PONTO STICKY */}
+            <div className="sticky top-1/2 -translate-x-1/2 -translate-y-1/2 flex justify-center">
+              <span className="text-2xl text-[#26150f] leading-none bg-[#d9d9d9] px-0.5">
                 ❖
               </span>
-            </motion.div>
+            </div>
           </div>
 
-          {/* LISTA DE ITENS (LAYOUT FIXO AGORA) */}
+          {/* LISTA DE ITENS (LAYOUT FIXO DESKTOP) */}
           <div className="flex flex-col gap-16 md:gap-24">
             {educationData.items.map((item, index) => {
               return (
                 <div
                   key={index}
                   className={cn(
-                    // MOBILE: Flex coluna, padding left
+                    // Mobile: Flex coluna
                     "relative flex flex-col pl-12",
-                    // DESKTOP: Grid 3 colunas, sem padding
+                    // Desktop: Grid 3 colunas
                     "md:grid md:grid-cols-[1fr_80px_1fr] md:items-start md:pl-0"
                   )}
                 >
-                  {/*
-                     COLUNA 1 (ESQUERDA): SEMPRE CABEÇALHO
-                     md:col-start-1: Força sempre na 1ª coluna.
-                     md:text-right: Alinha texto à direita (contra a linha).
-                  */}
+                  {/* COLUNA 1: SEMPRE TÍTULO (no Desktop) */}
                   <div className="text-left md:col-start-1 md:text-right md:py-0">
-                    <TimelineHeader item={item} align="right" />
+                    <TimelineHeader item={item} />
                   </div>
 
-                  {/* COLUNA 2: ESPAÇO CENTRAL */}
+                  {/* COLUNA 2: VAZIO */}
                   <div className="hidden md:block md:col-start-2" />
 
-                  {/*
-                     COLUNA 3 (DIREITA): SEMPRE DESCRIÇÃO
-                     md:col-start-3: Força sempre na 3ª coluna.
-                     md:text-left: Alinha texto à esquerda.
-                     md:pt-16: Mantém o efeito escada.
-                  */}
+                  {/* COLUNA 3: SEMPRE DESCRIÇÃO (no Desktop) */}
                   <div className="mt-4 text-left md:col-start-3 md:mt-0 md:pt-16">
-                    <TimelineBody item={item} align="left" />
+                    <TimelineBody item={item} />
                   </div>
                 </div>
               );
@@ -126,19 +93,13 @@ export function Education() {
 }
 
 // SUB-COMPONENTES
-function TimelineHeader({
-  item,
-}: {
-  item: EducationItem;
-  align: "left" | "right";
-}) {
+function TimelineHeader({ item }: { item: EducationItem }) {
   return (
-    // Em desktop, forçamos align-items-end para o texto encostar à linha
     <div className={cn("flex flex-col", "items-start md:items-end")}>
-      <h3 className="text-2xl font-bold uppercase text-[#26150f] leading-tight">
+      <h3 className="text-2xl font-bold uppercase text-[#26150f] leading-tight text-left md:text-right">
         {item.title}
       </h3>
-      <span className="mt-2 text-base font-medium text-[#26150f]">
+      <span className="mt-2 text-base font-medium text-[#26150f] text-left md:text-right">
         {item.institution}
       </span>
       {item.link && (
@@ -155,12 +116,7 @@ function TimelineHeader({
   );
 }
 
-function TimelineBody({
-  item,
-}: {
-  item: EducationItem;
-  align: "left" | "right";
-}) {
+function TimelineBody({ item }: { item: EducationItem }) {
   return (
     <div>
       <p className="text-base leading-relaxed text-[#26150f] font-normal max-w-[45ch]">
