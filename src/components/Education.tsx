@@ -1,38 +1,27 @@
 "use client";
 
-import { motion, useScroll, useTransform, useSpring } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 import { educationData, type EducationItem } from "@/data/content";
 import { cn } from "@/lib/utils";
 import { SectionWrapper } from "@/components/SectionWrapper";
 
 export function Education() {
-  const containerRef = useRef(null);
+  // A referência é colocada especificamente na "Pista" (a linha vertical)
+  const trackRef = useRef(null);
 
   const { scrollYProgress } = useScroll({
-    target: containerRef,
-    // Trigger: Começa quando o topo da lista chega ao centro, acaba quando o fundo chega ao centro.
+    target: trackRef,
+    // Lógica:
+    // Quando o TOPO da linha toca no CENTRO do ecrã -> 0%
+    // Quando o FUNDO da linha toca no CENTRO do ecrã -> 100%
     offset: ["start center", "end center"],
   });
 
-  // 1. O AMORTECEDOR (PHYSICS)
-  // Isto elimina o aspeto "tremido" ou "pixel a pixel".
-  // O movimento torna-se fluido, ignorando os "soluços" do rato.
-  const smoothProgress = useSpring(scrollYProgress, {
-    stiffness: 100, // Rigidez (quanto menor, mais "preguiçoso")
-    damping: 30, // Atrito (para parar suavemente sem oscilar)
-    restDelta: 0.001,
-  });
-
-  // 2. O MAPEAMENTO
-  // Usamos o 'smoothProgress' em vez do valor bruto.
-  // 55px -> Início exato.
-  // calc(100% - 50px) -> Fim exato.
-  const pointTop = useTransform(
-    smoothProgress,
-    [0, 1],
-    ["55px", "calc(100% - 50px)"]
-  );
+  // Usamos 'y' (TranslateY) em vez de 'top'.
+  // Isto usa a GPU para renderizar, garantindo suavidade máxima.
+  // Vai de 0% (topo da linha) a 100% (fundo da linha).
+  const pointTranslateY = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
 
   return (
     <SectionWrapper
@@ -62,22 +51,38 @@ export function Education() {
           </h2>
         </div>
 
-        {/* TIMELINE CONTAINER */}
-        <div ref={containerRef} className="relative">
-          {/* A LINHA (TRACK) */}
-          <div className="absolute left-5 top-0 bottom-0 w-px md:left-1/2 md:-translate-x-1/2 bg-[#26150f]/30"></div>
-
-          {/* O PONTO ANIMADO (Suave) */}
-          <motion.div
-            style={{ top: pointTop }}
-            className="absolute left-5 md:left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 flex justify-center"
+        {/* CONTENTOR GERAL */}
+        <div className="relative">
+          {/*
+             === A PISTA (TRACK) ===
+             Esta div define fisicamente onde a animação começa e acaba.
+             top-[55px]: Alinha com o 1º Título (pt-12 do container + ajuste visual).
+             bottom-[150px]: Alinha com o último texto (dependendo do tamanho da descrição).
+          */}
+          <div
+            ref={trackRef}
+            className="absolute left-5 top-[55px] bottom-[150px] w-px md:left-1/2 md:-translate-x-1/2"
           >
-            <span className="text-2xl text-[#26150f] leading-none bg-[#d9d9d9] px-0.5">
-              ❖
-            </span>
-          </motion.div>
+            {/* A Linha de Fundo (Estática) */}
+            <div className="absolute inset-0 w-full h-full bg-[#26150f]/30"></div>
+
+            {/*
+               O PONTO ANIMADO
+               Posição: absolute top-0 (Começa no topo da Pista).
+               style={{ y }}: O Framer Motion empurra-o para baixo via GPU.
+            */}
+            <motion.div
+              style={{ y: pointTranslateY }}
+              className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 flex justify-center will-change-transform"
+            >
+              <span className="text-2xl text-[#26150f] leading-none bg-[#d9d9d9] px-0.5">
+                ❖
+              </span>
+            </motion.div>
+          </div>
 
           {/* LISTA DE ITENS */}
+          {/* pt-12 (48px) para empurrar o conteúdo para baixo */}
           <div className="flex flex-col gap-16 md:gap-24 pt-12 pb-12">
             {educationData.items.map((item, index) => {
               return (
