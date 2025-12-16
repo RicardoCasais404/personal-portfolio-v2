@@ -1,27 +1,38 @@
 "use client";
 
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import { useRef } from "react";
 import { educationData, type EducationItem } from "@/data/content";
 import { cn } from "@/lib/utils";
 import { SectionWrapper } from "@/components/SectionWrapper";
 
 export function Education() {
-  // A referência é colocada especificamente na "Pista" (a linha vertical)
-  const trackRef = useRef(null);
+  // 1. Criamos a referência
+  const containerRef = useRef(null);
 
   const { scrollYProgress } = useScroll({
-    target: trackRef,
-    // Lógica:
-    // Quando o TOPO da linha toca no CENTRO do ecrã -> 0%
-    // Quando o FUNDO da linha toca no CENTRO do ecrã -> 100%
+    // 2. Ligamos a referência ao scroll
+    target: containerRef,
+    // Começa quando o topo da LISTA toca no centro do ecrã
+    // Acaba quando o fundo da LISTA toca no centro do ecrã
     offset: ["start center", "end center"],
   });
 
-  // Usamos 'y' (TranslateY) em vez de 'top'.
-  // Isto usa a GPU para renderizar, garantindo suavidade máxima.
-  // Vai de 0% (topo da linha) a 100% (fundo da linha).
-  const pointTranslateY = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
+  // 3. Suavização (Para não tremer)
+  const smoothProgress = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001,
+  });
+
+  // 4. Mapeamento (Onde começa e onde acaba o ponto)
+  // 55px: Alinha com o 1º Título
+  // calc(100% - 150px): Alinha com o último texto
+  const pointTop = useTransform(
+    smoothProgress,
+    [0, 1],
+    ["55px", "calc(100% - 150px)"]
+  );
 
   return (
     <SectionWrapper
@@ -51,39 +62,38 @@ export function Education() {
           </h2>
         </div>
 
-        {/* CONTENTOR GERAL */}
+        {/* TIMELINE WRAPPER */}
         <div className="relative">
           {/*
-             === A PISTA (TRACK) ===
-             Esta div define fisicamente onde a animação começa e acaba.
-             top-[55px]: Alinha com o 1º Título (pt-12 do container + ajuste visual).
-             bottom-[150px]: Alinha com o último texto (dependendo do tamanho da descrição).
+             A LINHA (TRACK)
+             Esta é independente. Ocupa a altura toda do pai (relative).
+          */}
+          <div className="absolute left-5 top-0 bottom-0 w-px md:left-1/2 md:-translate-x-1/2 bg-[#26150f]/30"></div>
+
+          {/*
+             O PONTO ANIMADO
+             Posicionado de forma absoluta sobre a linha.
+             O valor 'top' é controlado pelo JS (pointTop).
+          */}
+          <motion.div
+            style={{ top: pointTop }}
+            className="absolute left-5 md:left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 flex justify-center will-change-transform"
+          >
+            <span className="text-2xl text-[#26150f] leading-none bg-[#d9d9d9] px-0.5">
+              ❖
+            </span>
+          </motion.div>
+
+          {/*
+             LISTA DE ITENS
+             !!! A REF ESTÁ AQUI !!!
+             É este elemento que tem altura real e empurra a página.
+             O useScroll vai medir a posição DESTE div no ecrã.
           */}
           <div
-            ref={trackRef}
-            className="absolute left-5 top-[55px] bottom-[150px] w-px md:left-1/2 md:-translate-x-1/2"
+            ref={containerRef}
+            className="flex flex-col gap-16 md:gap-24 pt-12 pb-12"
           >
-            {/* A Linha de Fundo (Estática) */}
-            <div className="absolute inset-0 w-full h-full bg-[#26150f]/30"></div>
-
-            {/*
-               O PONTO ANIMADO
-               Posição: absolute top-0 (Começa no topo da Pista).
-               style={{ y }}: O Framer Motion empurra-o para baixo via GPU.
-            */}
-            <motion.div
-              style={{ y: pointTranslateY }}
-              className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 flex justify-center will-change-transform"
-            >
-              <span className="text-2xl text-[#26150f] leading-none bg-[#d9d9d9] px-0.5">
-                ❖
-              </span>
-            </motion.div>
-          </div>
-
-          {/* LISTA DE ITENS */}
-          {/* pt-12 (48px) para empurrar o conteúdo para baixo */}
-          <div className="flex flex-col gap-16 md:gap-24 pt-12 pb-12">
             {educationData.items.map((item, index) => {
               return (
                 <div
