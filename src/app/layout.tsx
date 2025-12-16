@@ -3,7 +3,6 @@ import localFont from "next/font/local";
 import "./globals.css";
 import { Navbar } from "@/components/Navbar";
 import { cn } from "@/lib/utils";
-// MUDANÇA: Importamos o Provider
 import { SmoothScrollProvider } from "@/components/SmoothScroll";
 
 const myFont = localFont({
@@ -26,7 +25,7 @@ export default function RootLayout({
     <html lang="en">
       <body
         className={cn(
-          "min-h-screen bg-[#d9d9d9] text-[#26150f] antialiased",
+          "min-h-screen bg-[#d9d9d9] text-[#26150f] antialiased overflow-x-hidden w-full",
           myFont.variable,
           myFont.className
         )}
