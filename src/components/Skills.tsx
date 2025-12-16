@@ -1,24 +1,39 @@
 "use client";
 
+import { useState } from "react";
 import { motion, Variants } from "framer-motion";
 import { skillsData } from "@/data/content";
 import { SectionWrapper } from "@/components/SectionWrapper";
 
 const containerVariants: Variants = {
   hidden: { opacity: 0 },
-  visible: { opacity: 1, transition: { staggerChildren: 0.1 } },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.1 },
+  },
 };
 
 const itemVariants: Variants = {
-  hidden: { opacity: 0, y: 20 },
+  hidden: { opacity: 0, y: 20, scale: 1 },
+  // Estado Normal (Visível mas apagado)
   visible: {
     opacity: 0.3,
     y: 0,
+    scale: 1,
     transition: { duration: 0.5, ease: "easeOut" },
+  },
+  // Estado Ativo (Focado/Hover)
+  active: {
+    opacity: 1,
+    scale: 1.1,
+    transition: { duration: 0.3, ease: "easeOut" },
   },
 };
 
 export function Skills() {
+  // Estado para saber qual skill está ativa (Hover ou Click)
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
+
   return (
     <SectionWrapper
       id="skills"
@@ -36,24 +51,32 @@ export function Skills() {
           viewport={{ once: true, margin: "-10%" }}
           className="flex flex-wrap justify-center items-center gap-x-8 gap-y-4 md:gap-x-16 md:gap-y-8"
         >
-          {skillsData.list.map((skill, index) => (
-            <motion.span
-              key={index}
-              variants={itemVariants}
-              // ESTADOS:
-              whileHover={{ opacity: 1, scale: 1.1 }} // Desktop
-              whileFocus={{ opacity: 1, scale: 1.1 }} // Mobile (Fica ativo após toque)
-              // Removi whileTap para não haver conflito visual, o Focus trata de tudo.
+          {skillsData.list.map((skill, index) => {
+            // Verifica se este item é o ativo
+            const isActive = activeIndex === index;
 
-              transition={{ duration: 0.3 }}
-              // ACESSIBILIDADE & MOBILE:
-              tabIndex={0}
-              onClick={() => {}} // <--- O TRUQUE PARA iOS (Permite o focus funcionar)
-              className="cursor-pointer text-[clamp(1.8rem,6.5vw,3.8rem)] font-extrabold uppercase text-[#26150f] outline-none select-none"
-            >
-              {skill}
-            </motion.span>
-          ))}
+            return (
+              <motion.span
+                key={index}
+                variants={itemVariants}
+                // A MÁGICA:
+                // Se estiver ativo, forçamos a variante "active".
+                // Se não, deixamos a variante "visible" (padrão do pai).
+                animate={isActive ? "active" : "visible"}
+                // EVENTOS (Desktop + Mobile):
+                onMouseEnter={() => setActiveIndex(index)} // Rato entra -> Ativa
+                onMouseLeave={() => setActiveIndex(null)} // Rato sai -> Desativa
+                onClick={() => {
+                  // No mobile, clicar alterna o estado.
+                  // Se já estiver ativo, desativa (null). Se não, ativa (index).
+                  setActiveIndex(isActive ? null : index);
+                }}
+                className="cursor-pointer text-[clamp(1.8rem,6.5vw,3.8rem)] font-extrabold uppercase text-[#26150f] outline-none select-none"
+              >
+                {skill}
+              </motion.span>
+            );
+          })}
         </motion.div>
       </div>
     </SectionWrapper>
