@@ -1,11 +1,32 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { useRef } from "react";
 import { educationData, type EducationItem } from "@/data/content";
 import { cn } from "@/lib/utils";
 import { SectionWrapper } from "@/components/SectionWrapper";
 
 export function Education() {
+  // A referência é o contentor da lista, que tem a altura real do conteúdo
+  const listRef = useRef(null);
+
+  const { scrollYProgress } = useScroll({
+    target: listRef,
+    // "start center": Começa quando o topo da lista está no meio do ecrã.
+    // "end center": Acaba quando o fundo da lista está no meio do ecrã.
+    offset: ["start center", "end center"],
+  });
+
+  // FÍSICA DIRETA (Sem 'useSpring' para evitar saltos de carregamento)
+  // Mapeamos o progresso do scroll (0 a 1) diretamente para a posição pixel/calc.
+  // 55px: Posição inicial (alinha com o 1º título).
+  // calc(100% - 150px): Posição final (alinha com o último texto).
+  const pointTop = useTransform(
+    scrollYProgress,
+    [0, 1],
+    ["55px", "calc(100% - 150px)"]
+  );
+
   return (
     <SectionWrapper
       id="education"
@@ -34,43 +55,59 @@ export function Education() {
           </h2>
         </div>
 
-        {/* TIMELINE CONTAINER */}
+        {/* TIMELINE WRAPPER (Relative) */}
         <div className="relative">
-          {/* TRACK (PISTA) */}
-          <div className="absolute left-5 top-[55px] bottom-[150px] w-px md:left-1/2 md:-translate-x-1/2 z-10 pointer-events-none">
-            <div className="sticky top-1/2 -translate-x-1/2 -translate-y-1/2 flex justify-center">
-              <span className="text-2xl text-[#26150f] leading-none bg-[#d9d9d9] px-0.5">
-                ❖
-              </span>
-            </div>
-          </div>
+          {/*
+             LINHA CENTRAL (TRACK)
+             Esta linha é estática e visual.
+             Vai de 55px (topo) até 150px (fundo).
+          */}
+          <div className="absolute left-5 top-[55px] bottom-[150px] w-px md:left-1/2 md:-translate-x-1/2 bg-[#26150f]/30"></div>
 
-          {/* LINHA VISUAL */}
-          <div className="absolute left-5 top-[0.6rem] bottom-[0.6rem] w-px bg-[#26150f]/30 md:left-1/2 md:-translate-x-1/2"></div>
+          {/*
+             O PONTO ANIMADO
+             - absolute: Solto da grelha.
+             - top: Controlado via JS (pointTop).
+             - left-[20px] / md:left-1/2: Centrado horizontalmente na linha.
+          */}
+          <motion.div
+            style={{ top: pointTop }}
+            className="absolute left-5 md:left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 flex justify-center will-change-transform"
+          >
+            {/* Símbolo com fundo opaco */}
+            <span className="text-2xl text-[#26150f] leading-none bg-[#d9d9d9] px-0.5">
+              ❖
+            </span>
+          </motion.div>
 
-          {/* LISTA */}
-          <div className="flex flex-col gap-16 md:gap-24 pt-12 pb-12">
+          {/*
+             LISTA DE ITENS
+             A REF VAI AQUI. O scroll é medido com base na altura e posição deste div.
+          */}
+          <div
+            ref={listRef}
+            className="flex flex-col gap-16 md:gap-24 pt-12 pb-12"
+          >
             {educationData.items.map((item, index) => {
               return (
                 <div
                   key={index}
                   className={cn(
-                    "relative flex flex-col pl-12",
-                    "md:grid md:grid-cols-[1fr_80px_1fr] md:items-start md:pl-0"
+                    "relative flex flex-col pl-12", // Mobile
+                    "md:grid md:grid-cols-[1fr_80px_1fr] md:items-start md:pl-0" // Desktop
                   )}
                 >
-                  {/* ESQUERDA (Títulos) */}
+                  {/* TÍTULO (Esq) */}
                   <div className="text-left md:col-start-1 md:text-right md:py-0">
                     <TimelineHeader item={item} align="right" />
                   </div>
 
-                  {/* MEIO (Vazio) */}
+                  {/* VAZIO (Meio) */}
                   <div className="hidden md:block md:col-start-2" />
 
-                  {/* DIREITA (Descrições) */}
+                  {/* DESCRIÇÃO (Dir) */}
                   <div className="mt-4 text-left md:col-start-3 md:mt-0 md:pt-16">
-                    {/* CORREÇÃO: Removemos a prop 'align' daqui */}
-                    <TimelineBody item={item} />
+                    <TimelineBody item={item} align="left" />
                   </div>
                 </div>
               );
@@ -82,7 +119,7 @@ export function Education() {
   );
 }
 
-// --- SUB-COMPONENTES ---
+// SUB-COMPONENTES (Com Animação de Entrada Restaurada)
 
 function TimelineHeader({
   item,
@@ -91,7 +128,6 @@ function TimelineHeader({
   item: EducationItem;
   align: "left" | "right";
 }) {
-  // Se align="right" (o padrão aqui), slide from -30 (esquerda)
   const xStart = align === "right" ? -30 : 30;
 
   return (
@@ -122,10 +158,14 @@ function TimelineHeader({
   );
 }
 
-// CORREÇÃO: Removemos a prop 'align' da interface e da função
-function TimelineBody({ item }: { item: EducationItem }) {
-  // Como está sempre na direita, vem sempre da direita (+30px)
-  const xStart = 30;
+function TimelineBody({
+  item,
+  align,
+}: {
+  item: EducationItem;
+  align: "left" | "right";
+}) {
+  const xStart = align === "right" ? -30 : 30;
 
   return (
     <motion.div
