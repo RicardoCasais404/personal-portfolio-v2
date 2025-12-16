@@ -5,40 +5,33 @@ import { Projects } from "@/components/Projects";
 import { Skills } from "@/components/Skills";
 import { Contact } from "@/components/Contact";
 import { Footer } from "@/components/Footer";
-import { Marquee } from "@/components/Marquee";
 
 export default function Home() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-between bg-[#d9d9d9]">
+      {/* 1. HERO */}
       <Hero />
 
       {/*
-         CONTAINER PRINCIPAL
-         Mobile: gap-16 (Apertado)
-         Desktop: md:gap-32 (O original espaçoso)
+         CONTAINER DE SECÇÕES
+         Sem 'gap'. O espaçamento é gerido pelo padding interno de cada secção
+         (py-20 no mobile, py-32 no desktop) e pelo min-h-screen.
       */}
-      <div className="w-full flex flex-col gap-16 md:gap-32">
+      <div className="w-full flex flex-col">
+        {/* 2. ABOUT */}
         <About />
 
-        {/* 1. PROJECTS (Agora em primeiro) */}
-        <div className="w-full flex flex-col">
-          <Marquee />
-          <Projects />
-        </div>
+        {/* 3. PROJECTS */}
+        <Projects />
 
-        {/* 2. EDUCATION (Agora em segundo) */}
-        <div className="w-full flex flex-col">
-          <Marquee />
-          <Education />
-        </div>
+        {/* 4. EDUCATION */}
+        <Education />
 
-        <div className="w-full flex flex-col">
-          <Marquee />
-          <Skills />
-        </div>
+        {/* 5. SKILLS */}
+        <Skills />
 
+        {/* 6. CONTACTO + FOOTER (Agrupados para ocupar 1 ecrã no fim) */}
         <div className="w-full flex flex-col snap-start min-h-screen">
-          <Marquee />
           <div className="flex-1 flex flex-col justify-center">
             <Contact />
           </div>
