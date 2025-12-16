@@ -1,31 +1,65 @@
 "use client";
 
-import { motion, useScroll, useTransform } from "framer-motion";
-import { useRef } from "react";
+import { motion, useScroll, useTransform, useSpring } from "framer-motion";
+import { useRef, useState, useLayoutEffect } from "react";
 import { educationData, type EducationItem } from "@/data/content";
 import { cn } from "@/lib/utils";
 import { SectionWrapper } from "@/components/SectionWrapper";
 
 export function Education() {
-  // A referência é o contentor da lista, que tem a altura real do conteúdo
-  const listRef = useRef(null);
+  const listRef = useRef<HTMLDivElement>(null);
+  const [start, setStart] = useState(0);
+  const [end, setEnd] = useState(0);
 
-  const { scrollYProgress } = useScroll({
-    target: listRef,
-    // "start center": Começa quando o topo da lista está no meio do ecrã.
-    // "end center": Acaba quando o fundo da lista está no meio do ecrã.
-    offset: ["start center", "end center"],
-  });
+  // Usamos o scroll global da janela, que é 100% fiável
+  const { scrollY } = useScroll();
 
-  // FÍSICA DIRETA (Sem 'useSpring' para evitar saltos de carregamento)
-  // Mapeamos o progresso do scroll (0 a 1) diretamente para a posição pixel/calc.
-  // 55px: Posição inicial (alinha com o 1º título).
-  // calc(100% - 150px): Posição final (alinha com o último texto).
-  const pointTop = useTransform(
-    scrollYProgress,
-    [0, 1],
+  // CÁLCULO MANUAL DAS COORDENADAS (Corre apenas uma vez ao montar)
+  useLayoutEffect(() => {
+    const element = listRef.current;
+    if (!element) return;
+
+    // Função para recalcular posições (importante se o ecrã mudar de tamanho)
+    const onResize = () => {
+      const rect = element.getBoundingClientRect();
+      const scrollTop = window.scrollY || document.documentElement.scrollTop;
+
+      // A posição absoluta do elemento na página
+      const elementTop = rect.top + scrollTop;
+      const elementHeight = rect.height;
+      const viewportHeight = window.innerHeight;
+
+      // DEFINIR OS GATILHOS:
+      // Início: Quando o topo da lista chega ao meio do ecrã
+      const startPoint = elementTop - viewportHeight / 2;
+      // Fim: Quando o fundo da lista chega ao meio do ecrã
+      const endPoint = elementTop + elementHeight - viewportHeight / 2;
+
+      setStart(startPoint);
+      setEnd(endPoint);
+    };
+
+    // Calcular logo no início e sempre que a janela muda
+    onResize();
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
+
+  // FÍSICA E MAPEAMENTO
+  // Mapeamos o Scroll Global (scrollY) entre os nossos pontos calculados (start -> end).
+  // Saída: 0px -> 100% (menos o padding do fim).
+  const rawPointTop = useTransform(
+    scrollY,
+    [start, end],
     ["55px", "calc(100% - 150px)"]
   );
+
+  // Suavização para eliminar "soluços"
+  const pointTop = useSpring(rawPointTop, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001,
+  });
 
   return (
     <SectionWrapper
@@ -55,35 +89,25 @@ export function Education() {
           </h2>
         </div>
 
-        {/* TIMELINE WRAPPER (Relative) */}
+        {/* TIMELINE CONTAINER */}
         <div className="relative">
-          {/*
-             LINHA CENTRAL (TRACK)
-             Esta linha é estática e visual.
-             Vai de 55px (topo) até 150px (fundo).
-          */}
-          <div className="absolute left-5 top-[55px] bottom-[150px] w-px md:left-1/2 md:-translate-x-1/2 bg-[#26150f]/30"></div>
+          {/* TRACK (LINHA) */}
+          <div className="absolute left-5 top-[55px] bottom-[150px] w-px md:left-1/2 md:-translate-x-1/2">
+            <div className="absolute inset-0 w-full h-full bg-[#26150f]/30"></div>
 
-          {/*
-             O PONTO ANIMADO
-             - absolute: Solto da grelha.
-             - top: Controlado via JS (pointTop).
-             - left-[20px] / md:left-1/2: Centrado horizontalmente na linha.
-          */}
-          <motion.div
-            style={{ top: pointTop }}
-            className="absolute left-5 md:left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 flex justify-center will-change-transform"
-          >
-            {/* Símbolo com fundo opaco */}
-            <span className="text-2xl text-[#26150f] leading-none bg-[#d9d9d9] px-0.5">
-              ❖
-            </span>
-          </motion.div>
+            {/* O PONTO ANIMADO */}
+            <motion.div
+              style={{ top: pointTop }}
+              className="absolute left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 flex justify-center will-change-transform"
+            >
+              <span className="text-2xl text-[#26150f] leading-none bg-[#d9d9d9] px-0.5">
+                ❖
+              </span>
+            </motion.div>
+          </div>
 
-          {/*
-             LISTA DE ITENS
-             A REF VAI AQUI. O scroll é medido com base na altura e posição deste div.
-          */}
+          {/* LISTA DE ITENS (A REF ESTÁ AQUI) */}
+          {/* É este elemento que medimos com o getBoundingClientRect */}
           <div
             ref={listRef}
             className="flex flex-col gap-16 md:gap-24 pt-12 pb-12"
@@ -97,15 +121,10 @@ export function Education() {
                     "md:grid md:grid-cols-[1fr_80px_1fr] md:items-start md:pl-0" // Desktop
                   )}
                 >
-                  {/* TÍTULO (Esq) */}
                   <div className="text-left md:col-start-1 md:text-right md:py-0">
                     <TimelineHeader item={item} align="right" />
                   </div>
-
-                  {/* VAZIO (Meio) */}
                   <div className="hidden md:block md:col-start-2" />
-
-                  {/* DESCRIÇÃO (Dir) */}
                   <div className="mt-4 text-left md:col-start-3 md:mt-0 md:pt-16">
                     <TimelineBody item={item} align="left" />
                   </div>
@@ -119,8 +138,7 @@ export function Education() {
   );
 }
 
-// SUB-COMPONENTES (Com Animação de Entrada Restaurada)
-
+// SUB-COMPONENTES
 function TimelineHeader({
   item,
   align,
@@ -129,7 +147,6 @@ function TimelineHeader({
   align: "left" | "right";
 }) {
   const xStart = align === "right" ? -30 : 30;
-
   return (
     <motion.div
       initial={{ opacity: 0, x: xStart }}
@@ -166,7 +183,6 @@ function TimelineBody({
   align: "left" | "right";
 }) {
   const xStart = align === "right" ? -30 : 30;
-
   return (
     <motion.div
       initial={{ opacity: 0, x: xStart }}
