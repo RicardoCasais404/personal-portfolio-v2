@@ -10,7 +10,7 @@ export function Education() {
   return (
     <SectionWrapper
       id="education"
-      enableY={false} // CRÍTICO: Mantém a secção quieta para o sticky funcionar
+      enableY={false}
       className="relative w-full min-h-screen py-20 px-6 md:px-12 md:py-32 bg-[#d9d9d9]"
     >
       <div className="w-full max-w-[1200px] mx-auto">
@@ -37,41 +37,33 @@ export function Education() {
 
         {/* TIMELINE CONTAINER */}
         <div className="relative">
-          {/*
-             PISTA DO SÍMBOLO (TRACK)
-             top-[55px] / bottom-[55px]: Margens iguais (Simetria).
-          */}
-          <div className="absolute left-5 top-[55px] bottom-[55px] w-px md:left-1/2 md:-translate-x-1/2 z-10 pointer-events-none">
+          {/* TRACK (PISTA) */}
+          <div className="absolute left-[20px] top-[55px] bottom-[55px] w-[1px] md:left-1/2 md:-translate-x-1/2 z-10 pointer-events-none">
             <div className="sticky top-1/2 -translate-x-1/2 -translate-y-1/2 flex justify-center">
-              <span className="text-2xl text-[#26150f] leading-none bg-[#d9d9d9] px-0.5">
+              <span className="text-2xl text-[#26150f] leading-none bg-[#d9d9d9] px-[2px]">
                 ❖
               </span>
             </div>
           </div>
 
-          {/* LINHA VISUAL DE FUNDO */}
-          <div className="absolute left-5 top-[0.6rem] bottom-[0.6rem] w-px bg-[#26150f]/30 md:left-1/2 md:-translate-x-1/2"></div>
+          {/* LINHA VISUAL */}
+          <div className="absolute left-[20px] top-[0.6rem] bottom-[0.6rem] w-[1px] bg-[#26150f]/30 md:left-1/2 md:-translate-x-1/2"></div>
 
-          {/* LISTA DE ITENS */}
+          {/* LISTA */}
           <div className="flex flex-col gap-16 md:gap-24 pt-12 pb-12">
             {educationData.items.map((item, index) => {
               return (
                 <div
                   key={index}
                   className={cn(
-                    "relative flex flex-col pl-12", // Mobile
-                    "md:grid md:grid-cols-[1fr_80px_1fr] md:items-start md:pl-0" // Desktop
+                    "relative flex flex-col pl-12",
+                    "md:grid md:grid-cols-[1fr_80px_1fr] md:items-start md:pl-0"
                   )}
                 >
-                  {/* COLUNA 1: TÍTULO */}
                   <div className="text-left md:col-start-1 md:text-right md:py-0">
                     <TimelineHeader item={item} align="right" />
                   </div>
-
-                  {/* COLUNA 2: VAZIO */}
                   <div className="hidden md:block md:col-start-2" />
-
-                  {/* COLUNA 3: DESCRIÇÃO */}
                   <div className="mt-4 text-left md:col-start-3 md:mt-0 md:pt-16">
                     <TimelineBody item={item} />
                   </div>
@@ -85,10 +77,11 @@ export function Education() {
   );
 }
 
-// --- SUB-COMPONENTES ANIMADOS ---
+// SUB-COMPONENTES
 
 function TimelineHeader({
   item,
+  align,
 }: {
   item: EducationItem;
   align: "left" | "right";
@@ -102,14 +95,15 @@ function TimelineHeader({
     return () => window.removeEventListener("resize", checkDesktop);
   }, []);
 
-  // Lógica:
-  // Mobile (isDesktop=false) -> x: 0 (Estático)
-  // Desktop (isDesktop=true) -> x: -30 (Vem da esquerda)
   const xStart = isDesktop ? -30 : 0;
   const opacityStart = isDesktop ? 0 : 1;
 
   return (
     <motion.div
+      // AQUI ESTÁ A CORREÇÃO: key={...}
+      // Se mudar de Mobile para Desktop, o React recria o componente,
+      // forçando a animação de entrada (x: -30 -> 0) a acontecer.
+      key={isDesktop ? "desktop" : "mobile"}
       initial={{ opacity: opacityStart, x: xStart }}
       whileInView={{ opacity: 1, x: 0 }}
       viewport={{ once: true, margin: "-100px" }}
@@ -146,14 +140,13 @@ function TimelineBody({ item }: { item: EducationItem }) {
     return () => window.removeEventListener("resize", checkDesktop);
   }, []);
 
-  // Lógica:
-  // Mobile -> x: 0
-  // Desktop -> x: 30 (Vem da direita)
   const xStart = isDesktop ? 30 : 0;
   const opacityStart = isDesktop ? 0 : 1;
 
   return (
     <motion.div
+      // AQUI TAMBÉM: key={...}
+      key={isDesktop ? "desktop" : "mobile"}
       initial={{ opacity: opacityStart, x: xStart }}
       whileInView={{ opacity: 1, x: 0 }}
       viewport={{ once: true, margin: "-100px" }}
