@@ -1,39 +1,11 @@
 "use client";
 
-import { motion, useScroll, useTransform, useSpring } from "framer-motion";
-import { useRef } from "react";
+import { motion } from "framer-motion";
 import { educationData, type EducationItem } from "@/data/content";
 import { cn } from "@/lib/utils";
 import { SectionWrapper } from "@/components/SectionWrapper";
 
 export function Education() {
-  // 1. Criamos a referência
-  const containerRef = useRef(null);
-
-  const { scrollYProgress } = useScroll({
-    // 2. Ligamos a referência ao scroll
-    target: containerRef,
-    // Começa quando o topo da LISTA toca no centro do ecrã
-    // Acaba quando o fundo da LISTA toca no centro do ecrã
-    offset: ["start center", "end center"],
-  });
-
-  // 3. Suavização (Para não tremer)
-  const smoothProgress = useSpring(scrollYProgress, {
-    stiffness: 100,
-    damping: 30,
-    restDelta: 0.001,
-  });
-
-  // 4. Mapeamento (Onde começa e onde acaba o ponto)
-  // 55px: Alinha com o 1º Título
-  // calc(100% - 150px): Alinha com o último texto
-  const pointTop = useTransform(
-    smoothProgress,
-    [0, 1],
-    ["55px", "calc(100% - 150px)"]
-  );
-
   return (
     <SectionWrapper
       id="education"
@@ -62,57 +34,42 @@ export function Education() {
           </h2>
         </div>
 
-        {/* TIMELINE WRAPPER */}
+        {/* TIMELINE CONTAINER */}
         <div className="relative">
-          {/*
-             A LINHA (TRACK)
-             Esta é independente. Ocupa a altura toda do pai (relative).
-          */}
-          <div className="absolute left-5 top-0 bottom-0 w-px md:left-1/2 md:-translate-x-1/2 bg-[#26150f]/30"></div>
+          {/* TRACK (PISTA) */}
+          <div className="absolute left-5 top-[55px] bottom-[150px] w-px md:left-1/2 md:-translate-x-1/2 z-10 pointer-events-none">
+            <div className="sticky top-1/2 -translate-x-1/2 -translate-y-1/2 flex justify-center">
+              <span className="text-2xl text-[#26150f] leading-none bg-[#d9d9d9] px-0.5">
+                ❖
+              </span>
+            </div>
+          </div>
 
-          {/*
-             O PONTO ANIMADO
-             Posicionado de forma absoluta sobre a linha.
-             O valor 'top' é controlado pelo JS (pointTop).
-          */}
-          <motion.div
-            style={{ top: pointTop }}
-            className="absolute left-5 md:left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 flex justify-center will-change-transform"
-          >
-            <span className="text-2xl text-[#26150f] leading-none bg-[#d9d9d9] px-0.5">
-              ❖
-            </span>
-          </motion.div>
+          {/* LINHA VISUAL */}
+          <div className="absolute left-5 top-[0.6rem] bottom-[0.6rem] w-px bg-[#26150f]/30 md:left-1/2 md:-translate-x-1/2"></div>
 
-          {/*
-             LISTA DE ITENS
-             !!! A REF ESTÁ AQUI !!!
-             É este elemento que tem altura real e empurra a página.
-             O useScroll vai medir a posição DESTE div no ecrã.
-          */}
-          <div
-            ref={containerRef}
-            className="flex flex-col gap-16 md:gap-24 pt-12 pb-12"
-          >
+          {/* LISTA */}
+          <div className="flex flex-col gap-16 md:gap-24 pt-12 pb-12">
             {educationData.items.map((item, index) => {
               return (
                 <div
                   key={index}
                   className={cn(
-                    "relative flex flex-col pl-12", // Mobile
-                    "md:grid md:grid-cols-[1fr_80px_1fr] md:items-start md:pl-0" // Desktop
+                    "relative flex flex-col pl-12",
+                    "md:grid md:grid-cols-[1fr_80px_1fr] md:items-start md:pl-0"
                   )}
                 >
-                  {/* TÍTULO */}
+                  {/* ESQUERDA (Títulos) */}
                   <div className="text-left md:col-start-1 md:text-right md:py-0">
-                    <TimelineHeader item={item} />
+                    <TimelineHeader item={item} align="right" />
                   </div>
 
-                  {/* VAZIO */}
+                  {/* MEIO (Vazio) */}
                   <div className="hidden md:block md:col-start-2" />
 
-                  {/* DESCRIÇÃO */}
+                  {/* DIREITA (Descrições) */}
                   <div className="mt-4 text-left md:col-start-3 md:mt-0 md:pt-16">
+                    {/* CORREÇÃO: Removemos a prop 'align' daqui */}
                     <TimelineBody item={item} />
                   </div>
                 </div>
@@ -125,10 +82,26 @@ export function Education() {
   );
 }
 
-// SUB-COMPONENTES
-function TimelineHeader({ item }: { item: EducationItem }) {
+// --- SUB-COMPONENTES ---
+
+function TimelineHeader({
+  item,
+  align,
+}: {
+  item: EducationItem;
+  align: "left" | "right";
+}) {
+  // Se align="right" (o padrão aqui), slide from -30 (esquerda)
+  const xStart = align === "right" ? -30 : 30;
+
   return (
-    <div className={cn("flex flex-col", "items-start md:items-end")}>
+    <motion.div
+      initial={{ opacity: 0, x: xStart }}
+      whileInView={{ opacity: 1, x: 0 }}
+      viewport={{ once: true, margin: "-100px" }}
+      transition={{ duration: 0.8, ease: "easeOut" }}
+      className={cn("flex flex-col", "items-start md:items-end")}
+    >
       <h3 className="text-2xl font-bold uppercase text-[#26150f] leading-tight text-left md:text-right">
         {item.title}
       </h3>
@@ -145,16 +118,25 @@ function TimelineHeader({ item }: { item: EducationItem }) {
           {item.link.text}
         </a>
       )}
-    </div>
+    </motion.div>
   );
 }
 
+// CORREÇÃO: Removemos a prop 'align' da interface e da função
 function TimelineBody({ item }: { item: EducationItem }) {
+  // Como está sempre na direita, vem sempre da direita (+30px)
+  const xStart = 30;
+
   return (
-    <div>
+    <motion.div
+      initial={{ opacity: 0, x: xStart }}
+      whileInView={{ opacity: 1, x: 0 }}
+      viewport={{ once: true, margin: "-100px" }}
+      transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
+    >
       <p className="text-base leading-relaxed text-[#26150f] font-normal max-w-[45ch]">
         {item.description}
       </p>
-    </div>
+    </motion.div>
   );
 }
