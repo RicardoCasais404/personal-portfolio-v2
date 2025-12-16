@@ -33,52 +33,68 @@ export function Education() {
           </h2>
         </div>
 
-        {/* TIMELINE CONTAINER */}
+        {/*
+           TIMELINE CONTAINER (Relative)
+           Este div cresce com o conteúdo dos items.
+        */}
         <div className="relative">
           {/*
-             CAMADA 1: A LINHA VISUAL (COMPRIDA)
-             top-[0.6rem]: Começa no topo da letra.
-             bottom-[0.6rem]: Acaba na base da letra.
+             === SISTEMA DE PISTA (TRACK SYSTEM) ===
+             Posicionado de forma absoluta em relação à lista.
+             Mobile: left-[20px] | Desktop: left-1/2
+             inset-y-0: Ocupa a altura TOTAL da lista.
           */}
-          <div className="absolute left-5 top-[0.6rem] bottom-[0.6rem] w-px md:left-1/2 md:-translate-x-1/2 bg-[#26150f]/30"></div>
+          <div className="absolute top-0 bottom-0 left-5 w-px md:left-1/2 md:-translate-x-1/2">
+            {/* 1. LINHA VISUAL (FUNDO) */}
+            {/* padding-y de 12px só para a linha não "furar" visualmente os limites */}
+            <div className="absolute inset-y-2 w-full bg-[#26150f]/30"></div>
 
-          {/*
-             CAMADA 2: A PISTA DO SÍMBOLO (CURTA = PADDING)
-             top-[2.6rem]: Começa 2rem (32px) ABAIXO do topo da linha.
-             bottom-[2.6rem]: Acaba 2rem (32px) ACIMA do fundo da linha.
-             Isto cria o "padding" físico. O símbolo sticky não consegue sair daqui.
-          */}
-          <div className="absolute left-5 top-[2.6rem] bottom-[2.6rem] w-px md:left-1/2 md:-translate-x-1/2 z-10 pointer-events-none">
-            {/* O PONTO STICKY */}
-            <div className="sticky top-1/2 -translate-x-1/2 -translate-y-1/2 flex justify-center">
-              <span className="text-2xl text-[#26150f] leading-none bg-[#d9d9d9] px-0.5">
-                ❖
-              </span>
+            {/* 2. O CONTENTOR DO SÍMBOLO (COM PADDING) */}
+            {/*
+               py-[55px]: É AQUI QUE DEFINES O INÍCIO E FIM.
+               O símbolo só pode deslizar DENTRO deste padding.
+               55px = Alinha com o 1º título (aprox).
+            */}
+            <div className="absolute inset-0 py-[55px] pointer-events-none">
+              {/* Wrapper para o sticky ter altura para percorrer */}
+              <div className="h-full w-full relative">
+                {/*
+                     O PONTO STICKY
+                     sticky: Agarra-se ao ecrã.
+                     top-1/2: Fica no centro do ecrã.
+                  */}
+                <div className="sticky top-1/2 -translate-y-1/2 flex justify-center items-center">
+                  <span className="text-2xl text-[#26150f] leading-none bg-[#d9d9d9] px-0.5">
+                    ❖
+                  </span>
+                </div>
+              </div>
             </div>
           </div>
 
-          {/* LISTA DE ITENS (LAYOUT FIXO DESKTOP) */}
-          <div className="flex flex-col gap-16 md:gap-24">
+          {/* LISTA DE ITENS */}
+          {/* pt-12 (48px) para empurrar o texto para baixo, alinhando com os 55px da linha */}
+          <div className="flex flex-col gap-16 md:gap-24 pt-12 pb-12">
             {educationData.items.map((item, index) => {
               return (
                 <div
                   key={index}
                   className={cn(
-                    // Mobile: Flex coluna
+                    // Mobile: Flex (Esquerda)
                     "relative flex flex-col pl-12",
-                    // Desktop: Grid 3 colunas
+                    // Desktop: Grid (Esquerda/Direita)
                     "md:grid md:grid-cols-[1fr_80px_1fr] md:items-start md:pl-0"
                   )}
                 >
-                  {/* COLUNA 1: SEMPRE TÍTULO (no Desktop) */}
+                  {/* TÍTULO (Sempre Coluna 1) */}
                   <div className="text-left md:col-start-1 md:text-right md:py-0">
                     <TimelineHeader item={item} />
                   </div>
 
-                  {/* COLUNA 2: VAZIO */}
+                  {/* VAZIO (Coluna 2) */}
                   <div className="hidden md:block md:col-start-2" />
 
-                  {/* COLUNA 3: SEMPRE DESCRIÇÃO (no Desktop) */}
+                  {/* DESCRIÇÃO (Sempre Coluna 3) */}
                   <div className="mt-4 text-left md:col-start-3 md:mt-0 md:pt-16">
                     <TimelineBody item={item} />
                   </div>
