@@ -37,8 +37,13 @@ export function Education() {
 
         {/* TIMELINE CONTAINER */}
         <div className="relative">
-          {/* TRACK (PISTA) */}
-          <div className="absolute left-5 top-[55px] bottom-[150px] w-px md:left-1/2 md:-translate-x-1/2 z-10 pointer-events-none">
+          {/*
+             PISTA DO SÍMBOLO (TRACK)
+             top-[55px]: Margem superior.
+             bottom-[55px]: Margem inferior (IGUAL AO TOPO).
+             Isto garante simetria perfeita no movimento.
+          */}
+          <div className="absolute left-5 top-[55px] bottom-[55px] w-px md:left-1/2 md:-translate-x-1/2 z-10 pointer-events-none">
             <div className="sticky top-1/2 -translate-x-1/2 -translate-y-1/2 flex justify-center">
               <span className="text-2xl text-[#26150f] leading-none bg-[#d9d9d9] px-0.5">
                 ❖
@@ -60,15 +65,10 @@ export function Education() {
                     "md:grid md:grid-cols-[1fr_80px_1fr] md:items-start md:pl-0"
                   )}
                 >
-                  {/* Títulos */}
                   <div className="text-left md:col-start-1 md:text-right md:py-0">
                     <TimelineHeader item={item} align="right" />
                   </div>
-
-                  {/* Vazio */}
                   <div className="hidden md:block md:col-start-2" />
-
-                  {/* Descrições */}
                   <div className="mt-4 text-left md:col-start-3 md:mt-0 md:pt-16">
                     <TimelineBody item={item} />
                   </div>
@@ -82,8 +82,7 @@ export function Education() {
   );
 }
 
-// --- SUB-COMPONENTES COM LÓGICA RESPONSIVA ---
-
+// SUB-COMPONENTES
 function TimelineHeader({
   item,
   align,
@@ -94,16 +93,13 @@ function TimelineHeader({
   const [isDesktop, setIsDesktop] = useState(false);
 
   useEffect(() => {
-    // Verifica se a largura é maior que 768px (o 'md' do Tailwind)
     const checkDesktop = () => setIsDesktop(window.innerWidth >= 768);
     checkDesktop();
     window.addEventListener("resize", checkDesktop);
     return () => window.removeEventListener("resize", checkDesktop);
   }, []);
 
-  // Se for Desktop, usa animação (-30px). Se for Mobile, fica estático (0px).
   const xStart = isDesktop ? (align === "right" ? -30 : 30) : 0;
-  // Se for Mobile, a opacidade inicial é 1 (visível logo).
   const opacityStart = isDesktop ? 0 : 1;
 
   return (
