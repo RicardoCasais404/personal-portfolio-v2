@@ -35,10 +35,24 @@ export function Education() {
 
         {/* TIMELINE CONTAINER */}
         <div className="relative">
-          {/* PISTA (TRACK) */}
-          <div className="absolute left-5 top-[103px] bottom-[198px] w-px md:left-1/2 md:-translate-x-1/2">
-            <div className="absolute inset-0 w-full h-full bg-[#26150f]/30"></div>
-            <div className="sticky top-1/2 -translate-x-1/2 -translate-y-1/2 z-10 flex justify-center">
+          {/*
+             CAMADA 1: A LINHA VISUAL (FUNDO)
+             - Mobile: left-[20px]
+             - Desktop: left-1/2
+             - top-[55px]: Começa alinhada com o 1º Título.
+             - bottom-0: Vai até ao fundo da lista (resolve o problema da linha curta).
+          */}
+          <div className="absolute left-5 top-[55px] bottom-0 w-px md:left-1/2 md:-translate-x-1/2 bg-[#26150f]/30"></div>
+
+          {/*
+             CAMADA 2: A PISTA DO SÍMBOLO (INVISIBLE TRACK)
+             - top-[55px]: Começa no mesmo sítio.
+             - bottom-[50px]: Acaba um pouco antes do fundo para o ponto não cair da linha visual.
+             - pointer-events-none: Para não bloquear cliques.
+          */}
+          <div className="absolute left-5 top-[55px] bottom-[50px] w-px md:left-1/2 md:-translate-x-1/2 z-10 pointer-events-none">
+            {/* O PONTO STICKY */}
+            <div className="sticky top-1/2 -translate-x-1/2 -translate-y-1/2 flex justify-center">
               <span className="text-2xl text-[#26150f] leading-none bg-[#d9d9d9] px-0.5">
                 ❖
               </span>
@@ -46,56 +60,37 @@ export function Education() {
           </div>
 
           {/* LISTA DE ITENS */}
-          <div className="flex flex-col gap-12 md:gap-20 pt-12 pb-12">
+          {/* pt-12 (48px) + ajuste visual das fontes ≈ 55px (Início da linha) */}
+          <div className="flex flex-col gap-16 md:gap-20 pt-12 pb-12">
             {educationData.items.map((item, index) => {
               return (
                 <div
                   key={index}
                   className={cn(
-                    // MOBILE: Flex coluna, padding left para dar espaço à linha
+                    // MOBILE: Flex Coluna, padding left para afastar da linha
                     "relative flex flex-col pl-12",
-                    // DESKTOP: Grid 3 colunas, sem padding left extra
+                    // DESKTOP: Grid 3 colunas, remove padding left, items-start
                     "md:grid md:grid-cols-[1fr_80px_1fr] md:items-start md:pl-0"
                   )}
                 >
                   {/*
-                     BLOCO 1: TÍTULO + LINK
-                     Mobile: Sempre em cima.
-                     Desktop: Coluna 1 (Esquerda) ou Coluna 3 (Direita) dependendo do índice.
+                     COLUNA 1: CABEÇALHO (Título + Link)
+                     - Mobile: text-left
+                     - Desktop: text-right
                   */}
-                  <div
-                    className={cn(
-                      // Mobile: Texto sempre à esquerda
-                      "text-left",
-                      // Desktop: Alterna alinhamento
-                      "md:py-0",
-                      index % 2 === 0
-                        ? "md:col-start-1 md:text-right"
-                        : "md:col-start-3 md:text-left"
-                    )}
-                  >
-                    <TimelineHeader item={item} isEven={index % 2 === 0} />
+                  <div className="text-left md:text-right md:py-0">
+                    <TimelineHeader item={item} />
                   </div>
 
-                  {/* BLOCO 2: ESPAÇO CENTRAL (Só Desktop) */}
-                  <div className="hidden md:block md:col-start-2" />
+                  {/* COLUNA 2: ESPAÇO CENTRAL (Vazio) */}
+                  <div className="hidden md:block" />
 
                   {/*
-                     BLOCO 3: DESCRIÇÃO
-                     Mobile: Aparece por baixo, com margem.
-                     Desktop: Coluna oposta ao título.
+                     COLUNA 3: DESCRIÇÃO
+                     - Mobile: mt-4 (Margem pequena entre link e descrição)
+                     - Desktop: pt-16 (Padding para criar efeito escada), text-left
                   */}
-                  <div
-                    className={cn(
-                      // Mobile: Margem no topo para separar do link (o pedido da "margem por baixo")
-                      "mt-4 text-left",
-                      // Desktop: Remove margem topo, adiciona padding topo para efeito escada, alterna coluna
-                      "md:mt-0 md:pt-16",
-                      index % 2 === 0
-                        ? "md:col-start-3 md:text-left"
-                        : "md:col-start-1 md:text-right"
-                    )}
-                  >
+                  <div className="mt-4 text-left md:mt-0 md:pt-16">
                     <TimelineBody item={item} />
                   </div>
                 </div>
@@ -108,29 +103,17 @@ export function Education() {
   );
 }
 
-// --- SUB-COMPONENTES ADAPTADOS ---
+// SUB-COMPONENTES (Simplificados para garantir alinhamento)
 
-// Recebe isEven para saber como alinhar o link no Desktop
-function TimelineHeader({
-  item,
-  isEven,
-}: {
-  item: EducationItem;
-  isEven: boolean;
-}) {
+function TimelineHeader({ item }: { item: EducationItem }) {
   return (
-    <div
-      className={cn(
-        "flex flex-col",
-        // Mobile: items-start (Esquerda). Desktop: Alterna.
-        "items-start",
-        isEven ? "md:items-end" : "md:items-start"
-      )}
-    >
-      <h3 className="text-2xl font-bold uppercase text-[#26150f] leading-tight">
+    <div className="flex flex-col md:items-end">
+      {/* md:items-end força o alinhamento à direita no Desktop */}
+
+      <h3 className="text-2xl font-bold uppercase text-[#26150f] leading-tight text-left md:text-right">
         {item.title}
       </h3>
-      <span className="mt-2 text-base font-medium text-[#26150f]">
+      <span className="mt-2 text-base font-medium text-[#26150f] text-left md:text-right">
         {item.institution}
       </span>
 
@@ -139,7 +122,7 @@ function TimelineHeader({
           href={item.link.url}
           target="_blank"
           rel="noopener noreferrer"
-          className="mt-4 inline-block text-sm font-bold text-[#26150f] underline decoration-1 underline-offset-4 hover:opacity-70 transition-opacity w-fit"
+          className="mt-4 inline-block text-sm font-bold text-[#26150f] underline decoration-1 underline-offset-4 hover:opacity-70 transition-opacity w-fit active:opacity-70"
         >
           {item.link.text}
         </a>

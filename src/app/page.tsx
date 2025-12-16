@@ -9,7 +9,7 @@ import { Marquee } from "@/components/Marquee";
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between bg-[#d9d9d9] overflow-x-hidden w-full max-w-[100vw]">
+    <main className="flex min-h-screen flex-col items-center justify-between bg-[#d9d9d9]">
       <Hero />
 
       {/*
