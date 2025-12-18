@@ -48,20 +48,14 @@ export function Navbar() {
       if (lenis) {
         lenis.scrollTo(href, {
           duration: 1.5,
-          // CORREÇÃO: -75px.
-          // Compensa a altura exata da Navbar, garantindo que o título começa logo abaixo dela.
-          offset: -75,
+          // CORREÇÃO: -120px.
+          // Sincronizado com o scroll-padding-top do CSS.
+          offset: -120,
         });
       } else {
         const target = document.querySelector(href);
         if (target) {
-          const elementPosition =
-            target.getBoundingClientRect().top + window.scrollY;
-          const offsetPosition = elementPosition - 75;
-          window.scrollTo({
-            top: offsetPosition,
-            behavior: "smooth",
-          });
+          target.scrollIntoView({ behavior: "smooth" });
         }
       }
     }, 10);

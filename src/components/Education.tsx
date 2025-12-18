@@ -38,16 +38,16 @@ export function Education() {
         {/* TIMELINE CONTAINER */}
         <div className="relative">
           {/* TRACK (PISTA) */}
-          <div className="absolute left-[20px] top-[55px] bottom-[55px] w-[1px] md:left-1/2 md:-translate-x-1/2 z-10 pointer-events-none">
+          <div className="absolute left-5 top-[55px] bottom-[55px] w-px md:left-1/2 md:-translate-x-1/2 z-10 pointer-events-none">
             <div className="sticky top-1/2 -translate-x-1/2 -translate-y-1/2 flex justify-center">
-              <span className="text-2xl text-[#26150f] leading-none bg-[#d9d9d9] px-[2px]">
+              <span className="text-2xl text-[#26150f] leading-none bg-[#d9d9d9] px-0.5">
                 ❖
               </span>
             </div>
           </div>
 
           {/* LINHA VISUAL */}
-          <div className="absolute left-[20px] top-[0.6rem] bottom-[0.6rem] w-[1px] bg-[#26150f]/30 md:left-1/2 md:-translate-x-1/2"></div>
+          <div className="absolute left-5 top-[0.6rem] bottom-[0.6rem] w-px bg-[#26150f]/30 md:left-1/2 md:-translate-x-1/2"></div>
 
           {/* LISTA */}
           <div className="flex flex-col gap-16 md:gap-24 pt-12 pb-12">
@@ -81,7 +81,6 @@ export function Education() {
 
 function TimelineHeader({
   item,
-  align,
 }: {
   item: EducationItem;
   align: "left" | "right";
