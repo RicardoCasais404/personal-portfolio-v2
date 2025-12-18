@@ -44,7 +44,6 @@ export function Hero() {
     <section
       id="hero"
       ref={containerRef}
-      // CORREÇÃO PADDING: px-4 no mobile para ganhar espaço lateral.
       className="relative flex min-h-screen w-full items-center justify-center px-4 md:px-12"
     >
       <div className="w-full max-w-[1200px] mx-auto mask-[linear-gradient(to_bottom,black_90%,transparent_100%)] md:mask-[linear-gradient(to_bottom,black_95%,transparent_100%)]">
@@ -56,10 +55,12 @@ export function Hero() {
           className="flex flex-col items-start pb-12 md:pb-10"
         >
           {/*
-             CORREÇÃO TAMANHO: text-[10vw].
-             Isto garante que "DEVELOPMENT" + ÍCONE cabem numa linha sem cortar a última letra.
+             TIPOGRAFIA:
+             Mobile: text-[10vw] (Seguro para não cortar)
+             Desktop: text-[clamp...] (Original)
           */}
           <h1 className="flex flex-col items-start w-full text-[10vw] md:text-[clamp(2.2rem,10vw,8rem)] font-bold leading-[0.85] md:leading-[1.1] tracking-normal text-[#26150f]">
+            {/* LINHA 1: FULL-STACK */}
             <div className="w-full flex flex-col md:flex-row md:items-center">
               <motion.div variants={slideVariants}>FULL</motion.div>
               <motion.span
@@ -71,6 +72,7 @@ export function Hero() {
               <motion.div variants={slideVariants}>STACK</motion.div>
             </div>
 
+            {/* LINHA 2: DEVELOPMENT + ÍCONE */}
             <motion.div
               variants={slideVariants}
               className="flex items-center gap-[0.25em] w-full md:ml-[4%]"
@@ -98,10 +100,19 @@ export function Hero() {
               </motion.div>
             </motion.div>
 
+            {/* LINHA 3: & CREATIVE */}
+            {/* Mobile: Coluna (Empilhado) | Desktop: Linha (Lado a lado) */}
             <div className="w-full flex flex-col md:flex-row md:gap-[0.25em]">
               <motion.div variants={slideVariants}>&</motion.div>
               <motion.div variants={slideVariants}>CREATIVE</motion.div>
-              <motion.div variants={slideVariants}>SOLUTIONS.</motion.div>
+            </div>
+
+            {/* LINHA 4: SOLUTIONS. */}
+            {/* Sempre numa nova linha (bloco separado) para restaurar o design Desktop */}
+            <div className="w-full">
+              <motion.div variants={slideVariants} className="block">
+                SOLUTIONS.
+              </motion.div>
             </div>
           </h1>
 

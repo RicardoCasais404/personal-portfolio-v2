@@ -3,18 +3,19 @@
 import { projectsData, type ProjectItem } from "@/data/content";
 import { cn } from "@/lib/utils";
 import { SectionWrapper } from "@/components/SectionWrapper";
-import Image from "next/image"; // <--- Importar componente de Imagem
+import Image from "next/image";
 
 export function Projects() {
   return (
     <SectionWrapper
       id="projects"
-      className="relative w-full min-h-screen py-24 px-6 md:px-12 md:py-32 bg-[#d9d9d9] flex flex-col justify-center"
+      className="relative w-full min-h-screen py-32 px-6 md:px-12 bg-[#d9d9d9] flex flex-col justify-center"
     >
       <div className="w-full max-w-[1200px] mx-auto">
         <h2 className="mb-12 md:mb-32 text-center text-[clamp(2.5rem,8vw,5rem)] font-extrabold uppercase leading-[0.9] tracking-normal text-[#26150f]">
           {projectsData.title}
         </h2>
+
         <div className="flex flex-col gap-20 md:gap-40">
           {projectsData.items.map((project, index) => (
             <ProjectCard key={index} project={project} index={index} />
@@ -36,7 +37,7 @@ function ProjectCard({
 
   return (
     <div className="flex flex-col md:flex-row gap-12 md:gap-20 items-center">
-      {/* ÁREA DA IMAGEM / LINK */}
+      {/* ÁREA DA IMAGEM */}
       <a
         href={project.link}
         target="_blank"
@@ -46,28 +47,37 @@ function ProjectCard({
           isEven ? "md:order-1" : "md:order-2"
         )}
       >
-        {/* LÓGICA DE IMAGEM REAL VS PLACEHOLDER */}
         {project.image ? (
-          // SE TIVER IMAGEM: Mostra a imagem com efeito de zoom
           <div className="relative w-full h-full">
+            {/*
+                IMAGEM REAL
+                grayscale: Preto e branco por defeito.
+                group-hover:grayscale-0: Cores reais ao passar o rato.
+                active:duration-0: Mudança imediata no toque (mobile).
+             */}
             <Image
               src={project.image}
               alt={project.title}
-              fill // Ocupa todo o espaço do pai
-              className="object-cover transition-transform duration-700 group-hover:scale-110 active:duration-0 active:scale-110"
+              fill
+              className="object-cover grayscale transition-all duration-700 group-hover:grayscale-0 group-hover:scale-110 group-active:grayscale-0 group-active:scale-110 active:duration-0"
             />
-            {/* Overlay subtil para a imagem não brigar com o fundo se for muito clara */}
-            <div className="absolute inset-0 bg-[#26150f]/0 group-hover:bg-[#26150f]/10 transition-colors duration-500" />
+
+            {/*
+                FILTRO DE COR (TINT)
+                Uma camada castanha semitransparente que se funde com a imagem a preto e branco.
+                group-hover:opacity-0: Desaparece para revelar a imagem original.
+             */}
+            <div className="absolute inset-0 bg-[#26150f]/20 mix-blend-multiply transition-opacity duration-500 group-hover:opacity-0 group-active:opacity-0 active:duration-0" />
           </div>
         ) : (
-          // SE NÃO TIVER IMAGEM: Mostra o símbolo (Placeholder)
-          <span className="text-6xl text-[#26150f]/20 transition-transform duration-700 group-hover:scale-110 active:duration-0 active:scale-110">
+          // PLACEHOLDER (Símbolo)
+          <span className="text-6xl text-[#26150f]/20 transition-transform duration-700 group-hover:scale-110 group-active:scale-110 group-focus:scale-110 active:duration-0">
             ❖
           </span>
         )}
       </a>
 
-      {/* ÁREA DE TEXTO (Igual ao anterior) */}
+      {/* ÁREA DE TEXTO */}
       <div
         className={cn(
           "w-full md:w-1/2 flex flex-col",
@@ -96,7 +106,7 @@ function ProjectCard({
               key={tag}
               tabIndex={0}
               onClick={() => {}}
-              className="px-3 py-1 text-xs font-bold border border-[#26150f] text-[#26150f] uppercase tracking-wider transition-colors cursor-pointer outline-none hover:bg-[#26150f] hover:text-[#d9d9d9] focus:bg-[#26150f] focus:text-[#d9d9d9]"
+              className="px-3 py-1 text-xs font-bold border border-[#26150f] text-[#26150f] uppercase tracking-wider transition-colors cursor-pointer outline-none hover:bg-[#26150f] hover:text-[#d9d9d9] focus:bg-[#26150f] focus:text-[#d9d9d9] active:bg-[#26150f] active:text-[#d9d9d9] active:duration-0"
             >
               {tag}
             </span>
@@ -117,8 +127,9 @@ function ProjectCard({
             View Project
             <span
               className={cn(
-                "absolute bottom-0 h-0.5 w-full bg-[#26150f] transition-all duration-300 group-hover:w-0 group-focus:w-0 group-active:w-0",
-                isEven ? "left-0" : "right-0"
+                "absolute bottom-0 h-0.5 w-full bg-[#26150f] transition-all duration-300 group-hover:w-0 group-focus:w-0 group-active:w-0 active:duration-0",
+                "left-0",
+                !isEven ? "md:right-0 md:left-auto" : "md:left-0 md:right-auto"
               )}
             />
           </a>
