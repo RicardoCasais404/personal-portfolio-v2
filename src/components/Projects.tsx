@@ -8,9 +8,9 @@ export function Projects() {
   return (
     <SectionWrapper
       id="projects"
-      // ALTERAÇÃO: justify-start (Mobile) -> O conteúdo começa logo após o padding.
-      // md:justify-center (Desktop) -> O conteúdo é centrado.
-      className="relative w-full min-h-screen py-24 px-6 md:px-12 md:py-32 bg-[#d9d9d9] flex flex-col justify-start md:justify-center"
+      // PADRONIZAÇÃO: py-32.
+      // justify-center: Centra o conteúdo no ecrã. Como temos py-32, o título nunca bate no topo.
+      className="relative w-full min-h-screen py-32 px-6 md:px-12 bg-[#d9d9d9] flex flex-col justify-center"
     >
       <div className="w-full max-w-[1200px] mx-auto">
         <h2 className="mb-12 md:mb-32 text-center text-[clamp(2.5rem,8vw,5rem)] font-extrabold uppercase leading-[0.9] tracking-normal text-[#26150f]">
@@ -46,7 +46,7 @@ function ProjectCard({
           isEven ? "md:order-1" : "md:order-2"
         )}
       >
-        <span className="text-6xl text-[#26150f]/20 transition-transform duration-700 group-hover:scale-110 group-active:scale-110 group-focus:scale-110">
+        <span className="text-6xl text-[#26150f]/20 transition-transform duration-700 group-hover:scale-110 active:duration-0 active:scale-110">
           ❖
         </span>
       </a>
@@ -102,7 +102,7 @@ function ProjectCard({
               className={cn(
                 "absolute bottom-0 h-0.5 w-full bg-[#26150f] transition-all duration-300 group-hover:w-0 group-focus:w-0 group-active:w-0",
                 "left-0",
-                !isEven ? "md:right-0 md:left-auto" : "md:left-0 md:right-auto"
+                !isEven && "md:right-0 md:left-auto"
               )}
             />
           </a>
