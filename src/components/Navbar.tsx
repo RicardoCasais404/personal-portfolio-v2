@@ -40,34 +40,26 @@ export function Navbar() {
     href: string
   ) => {
     e.preventDefault();
-
     setIsOpen(false);
     document.body.style.overflow = "";
     lenis?.start();
 
-    // Aumentámos o tempo para 50ms para dar tempo ao browser de renderizar o fecho do menu
     setTimeout(() => {
       if (lenis) {
         lenis.scrollTo(href, {
           duration: 1.5,
-          // CORREÇÃO: Aumentei para -150px.
-          // Isto cria uma zona de segurança grande no topo.
-          offset: -100,
+          // CORREÇÃO: Offset 0.
+          // Vamos resolver o espaço através do padding na própria secção.
+          // Assim o scroll pára no pixel exato da divisão das secções (sem mostrar o About).
+          offset: 0,
         });
       } else {
         const target = document.querySelector(href);
         if (target) {
-          const elementPosition =
-            target.getBoundingClientRect().top + window.scrollY;
-          // Correção também no fallback
-          const offsetPosition = elementPosition - 100;
-          window.scrollTo({
-            top: offsetPosition,
-            behavior: "smooth",
-          });
+          target.scrollIntoView({ behavior: "smooth" });
         }
       }
-    }, 50);
+    }, 10);
   };
 
   return (
@@ -88,7 +80,6 @@ export function Navbar() {
           <Logo className="h-8 w-auto transition-transform duration-500 hover:rotate-90 md:h-9" />
         </Link>
 
-        {/* BOTÃO HAMBÚRGUER (MOBILE) */}
         <button
           onClick={() => setIsOpen(!isOpen)}
           className="flex flex-col gap-1.5 z-60 md:hidden p-2 justify-center items-center w-10 h-10"
@@ -108,7 +99,6 @@ export function Navbar() {
           />
         </button>
 
-        {/* NAVEGAÇÃO DESKTOP */}
         <div className="flex-1 relative overflow-hidden md:overflow-visible md:w-full md:flex-1 md:flex-col md:items-center md:justify-center hidden md:flex">
           <nav className="md:flex md:flex-col md:gap-10 md:items-center">
             {navItems.map((item) => {
@@ -142,7 +132,6 @@ export function Navbar() {
         </div>
       </aside>
 
-      {/* --- MENU FULLSCREEN MOBILE --- */}
       <AnimatePresence>
         {isOpen && (
           <motion.div

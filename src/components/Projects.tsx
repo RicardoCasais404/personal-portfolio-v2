@@ -8,18 +8,16 @@ export function Projects() {
   return (
     <SectionWrapper
       id="projects"
-      // REMOVIDO: 'justify-center'.
-      // MANTIDO: 'py-...' e 'min-h-screen'.
-      // Agora o título começa sempre na mesma posição relativa ao topo da secção.
-      className="relative w-full min-h-screen py-12 px-6 md:px-12 md:py-32 bg-[#d9d9d9] flex flex-col"
+      // ALTERAÇÕES:
+      // py-24 (96px): Garante que o conteúdo começa abaixo da Navbar (que tem ~70px).
+      // justify-center: Mantém o conteúdo centrado se o ecrã for alto.
+      className="relative w-full min-h-screen py-24 px-6 md:px-12 md:py-32 bg-[#d9d9d9] flex flex-col justify-center"
     >
       <div className="w-full max-w-[1200px] mx-auto">
-        {/* TÍTULO */}
         <h2 className="mb-12 md:mb-32 text-center text-[clamp(2.5rem,8vw,5rem)] font-extrabold uppercase leading-[0.9] tracking-normal text-[#26150f]">
           {projectsData.title}
         </h2>
 
-        {/* LISTA */}
         <div className="flex flex-col gap-20 md:gap-40">
           {projectsData.items.map((project, index) => (
             <ProjectCard key={index} project={project} index={index} />
@@ -41,7 +39,6 @@ function ProjectCard({
 
   return (
     <div className="flex flex-col md:flex-row gap-12 md:gap-20 items-center">
-      {/* IMAGEM LINK */}
       <a
         href={project.link}
         target="_blank"
@@ -72,7 +69,6 @@ function ProjectCard({
           {project.description}
         </p>
 
-        {/* TAGS */}
         <div
           className={cn(
             "flex flex-wrap gap-3 mb-10",
@@ -92,7 +88,6 @@ function ProjectCard({
           ))}
         </div>
 
-        {/* BOTÃO */}
         <div className="w-full">
           <a
             href={project.link}
