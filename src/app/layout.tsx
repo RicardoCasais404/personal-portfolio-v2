@@ -13,7 +13,8 @@ const myFont = localFont({
 
 export const metadata: Metadata = {
   title: "Ricardo Casais | Full Stack Developer",
-  description: "Portfólio de Ricardo Casais.",
+  description: "Creative developer specializing in modern web experiences.",
+  icons: "src/app/favicon.ico",
 };
 
 export default function RootLayout({
