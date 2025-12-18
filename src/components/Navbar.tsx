@@ -21,7 +21,6 @@ export function Navbar() {
   const lenis = useSmoothScroll();
   const [isOpen, setIsOpen] = useState(false);
 
-  // Bloquear scroll quando menu abre
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
@@ -46,35 +45,33 @@ export function Navbar() {
     document.body.style.overflow = "";
     lenis?.start();
 
-    // Pequeno timeout para garantir que o menu fechou antes de scrolar
+    // Aumentámos o tempo para 50ms para dar tempo ao browser de renderizar o fecho do menu
     setTimeout(() => {
       if (lenis) {
         lenis.scrollTo(href, {
           duration: 1.5,
-          // CORREÇÃO AQUI: Aumentei para -100.
-          // A barra mobile tem +/- 65px de altura.
-          // -100 garante que o título fica ~35px ABAIXO da barra (visível e com margem).
-          offset: -100,
+          // CORREÇÃO: Aumentei para -150px.
+          // Isto cria uma zona de segurança grande no topo.
+          offset: -150,
         });
       } else {
         const target = document.querySelector(href);
-        // Fallback para CSS scroll
         if (target) {
           const elementPosition =
             target.getBoundingClientRect().top + window.scrollY;
-          const offsetPosition = elementPosition - 100;
+          // Correção também no fallback
+          const offsetPosition = elementPosition - 150;
           window.scrollTo({
             top: offsetPosition,
             behavior: "smooth",
           });
         }
       }
-    }, 10);
+    }, 50);
   };
 
   return (
     <>
-      {/* --- BARRA FIXA --- */}
       <aside
         className={cn(
           "fixed left-0 top-0 z-60 flex w-full items-center bg-[#d9d9d9] border-b border-[#26150f]",
@@ -111,7 +108,7 @@ export function Navbar() {
           />
         </button>
 
-        {/* NAVEGAÇÃO DESKTOP (Escondida no Mobile) */}
+        {/* NAVEGAÇÃO DESKTOP */}
         <div className="flex-1 relative overflow-hidden md:overflow-visible md:w-full md:flex-1 md:flex-col md:items-center md:justify-center hidden md:flex">
           <nav className="md:flex md:flex-col md:gap-10 md:items-center">
             {navItems.map((item) => {

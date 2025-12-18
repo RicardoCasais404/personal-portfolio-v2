@@ -8,7 +8,7 @@ interface Props {
   children: React.ReactNode;
   id?: string;
   className?: string;
-  enableY?: boolean; // Nova propriedade opcional
+  enableY?: boolean;
 }
 
 export function SectionWrapper({
@@ -24,7 +24,6 @@ export function SectionWrapper({
     offset: ["start end", "end start"],
   });
 
-  // --- A FÍSICA ---
   const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0]);
   const scale = useTransform(
     scrollYProgress,
@@ -32,9 +31,6 @@ export function SectionWrapper({
     [0.95, 1, 1, 0.95]
   );
 
-  // LÓGICA CONDICIONAL:
-  // Se enableY for falso, o valor é sempre 0 (sem movimento).
-  // Se for verdadeiro (padrão), faz a animação normal.
   const yValue = enableY ? [100, 0, 0, -100] : [0, 0, 0, 0];
   const y = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], yValue);
 
@@ -43,7 +39,9 @@ export function SectionWrapper({
       ref={containerRef}
       id={id}
       style={{ opacity, scale, y }}
-      className={cn("w-full", className)}
+      // ADICIONADO: scroll-mt-[150px]
+      // Isto define uma margem de topo para o scroll nativo.
+      className={cn("w-full scroll-mt-[150px]", className)}
     >
       {children}
     </motion.section>
