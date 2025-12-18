@@ -52,7 +52,7 @@ export function Navbar() {
           duration: 1.5,
           // CORREÇÃO: Aumentei para -150px.
           // Isto cria uma zona de segurança grande no topo.
-          offset: -150,
+          offset: -100,
         });
       } else {
         const target = document.querySelector(href);
@@ -60,7 +60,7 @@ export function Navbar() {
           const elementPosition =
             target.getBoundingClientRect().top + window.scrollY;
           // Correção também no fallback
-          const offsetPosition = elementPosition - 150;
+          const offsetPosition = elementPosition - 100;
           window.scrollTo({
             top: offsetPosition,
             behavior: "smooth",
