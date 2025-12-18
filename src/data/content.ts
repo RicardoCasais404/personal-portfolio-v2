@@ -130,7 +130,7 @@ export const projectsData = {
         "A mockup online store built to explore high-end web design principles. Key features include a custom off-canvas mobile navigation, dynamic product filtering, and smooth micro-interactions. The goal was to combine a premium aesthetic with maximum accessibility and instant load times.",
       tags: ["React", "Next.js", "Tailwind", "Framer Motion", "Zustand"],
       link: "https://lumina-seven-phi.vercel.app/",
-      image: "public/projects/lumina.png",
+      image: "/projects/lumina.png",
     },
     {
       title: "Project Title 2",
@@ -138,7 +138,7 @@ export const projectsData = {
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis vulputate pretium mattis. Sed vel erat ac dolor euismod volutpat eu sed ante. Vestibulum hendrerit consectetur quam.",
       tags: ["TypeScript", "Node.js", "PostgreSQL"],
       link: "https://github.com/RicardoCasais404",
-      image: "/placeholder-2.jpg",
+      //image: "/placeholder-2.jpg",
     },
     {
       title: "Project Title 3",
@@ -146,7 +146,7 @@ export const projectsData = {
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis vulputate pretium mattis. Sed vel erat ac dolor euismod volutpat eu sed ante. Vestibulum hendrerit consectetur quam.",
       tags: ["React Native", "Firebase", "Stripe"],
       link: "https://github.com/RicardoCasais404",
-      image: "/placeholder-3.jpg",
+      //image: "/placeholder-3.jpg",
     },
   ] as ProjectItem[],
 };
