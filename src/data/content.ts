@@ -125,12 +125,12 @@ export const projectsData = {
   title: "PROJECTS",
   items: [
     {
-      title: "Project Title 1",
+      title: "LUMINA",
       description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis vulputate pretium mattis. Sed vel erat ac dolor euismod volutpat eu sed ante. Vestibulum hendrerit consectetur quam.",
-      tags: ["Next.js", "Tailwind", "Framer Motion"],
-      link: "https://github.com/RicardoCasais404", // Podes mudar para o link real
-      image: "/placeholder-1.jpg",
+        "Lumina is a minimalist e-commerce case study for luxury lighting, engineered for speed and aesthetics.",
+      tags: ["React", "Next.js", "Tailwind", "Framer Motion"],
+      link: "https://lumina-seven-phi.vercel.app/",
+      image: "/projects/lumina.png",
     },
     {
       title: "Project Title 2",
