@@ -8,16 +8,14 @@ export function Projects() {
   return (
     <SectionWrapper
       id="projects"
-      // ALTERAÇÕES:
-      // py-24 (96px): Garante que o conteúdo começa abaixo da Navbar (que tem ~70px).
-      // justify-center: Mantém o conteúdo centrado se o ecrã for alto.
-      className="relative w-full min-h-screen py-24 px-6 md:px-12 md:py-32 bg-[#d9d9d9] flex flex-col justify-center"
+      // ALTERAÇÃO: justify-start (Mobile) -> O conteúdo começa logo após o padding.
+      // md:justify-center (Desktop) -> O conteúdo é centrado.
+      className="relative w-full min-h-screen py-24 px-6 md:px-12 md:py-32 bg-[#d9d9d9] flex flex-col justify-start md:justify-center"
     >
       <div className="w-full max-w-[1200px] mx-auto">
         <h2 className="mb-12 md:mb-32 text-center text-[clamp(2.5rem,8vw,5rem)] font-extrabold uppercase leading-[0.9] tracking-normal text-[#26150f]">
           {projectsData.title}
         </h2>
-
         <div className="flex flex-col gap-20 md:gap-40">
           {projectsData.items.map((project, index) => (
             <ProjectCard key={index} project={project} index={index} />
@@ -104,7 +102,7 @@ function ProjectCard({
               className={cn(
                 "absolute bottom-0 h-0.5 w-full bg-[#26150f] transition-all duration-300 group-hover:w-0 group-focus:w-0 group-active:w-0",
                 "left-0",
-                !isEven && "md:right-0 md:left-auto"
+                !isEven ? "md:right-0 md:left-auto" : "md:left-0 md:right-auto"
               )}
             />
           </a>

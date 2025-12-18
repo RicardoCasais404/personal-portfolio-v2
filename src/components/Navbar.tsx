@@ -48,15 +48,20 @@ export function Navbar() {
       if (lenis) {
         lenis.scrollTo(href, {
           duration: 1.5,
-          // CORREÇÃO: Offset 0.
-          // Vamos resolver o espaço através do padding na própria secção.
-          // Assim o scroll pára no pixel exato da divisão das secções (sem mostrar o About).
-          offset: 0,
+          // CORREÇÃO: -75px.
+          // Compensa a altura exata da Navbar, garantindo que o título começa logo abaixo dela.
+          offset: -75,
         });
       } else {
         const target = document.querySelector(href);
         if (target) {
-          target.scrollIntoView({ behavior: "smooth" });
+          const elementPosition =
+            target.getBoundingClientRect().top + window.scrollY;
+          const offsetPosition = elementPosition - 75;
+          window.scrollTo({
+            top: offsetPosition,
+            behavior: "smooth",
+          });
         }
       }
     }, 10);
