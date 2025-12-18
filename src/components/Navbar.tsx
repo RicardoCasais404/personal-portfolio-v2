@@ -42,19 +42,32 @@ export function Navbar() {
   ) => {
     e.preventDefault();
 
-    // 1. Fechar menu e libertar scroll imediatamente
     setIsOpen(false);
     document.body.style.overflow = "";
     lenis?.start();
 
-    // 2. Pequeno timeout para garantir que o motor de scroll acordou antes de navegar
+    // Pequeno timeout para garantir que o menu fechou antes de scrolar
     setTimeout(() => {
       if (lenis) {
-        lenis.scrollTo(href, { duration: 1.5, offset: -50 });
+        lenis.scrollTo(href, {
+          duration: 1.5,
+          // CORREÇÃO AQUI: Aumentei para -100.
+          // A barra mobile tem +/- 65px de altura.
+          // -100 garante que o título fica ~35px ABAIXO da barra (visível e com margem).
+          offset: -100,
+        });
       } else {
-        // Fallback nativo se o Lenis falhar
         const target = document.querySelector(href);
-        target?.scrollIntoView({ behavior: "smooth" });
+        // Fallback para CSS scroll
+        if (target) {
+          const elementPosition =
+            target.getBoundingClientRect().top + window.scrollY;
+          const offsetPosition = elementPosition - 100;
+          window.scrollTo({
+            top: offsetPosition,
+            behavior: "smooth",
+          });
+        }
       }
     }, 10);
   };
@@ -65,12 +78,7 @@ export function Navbar() {
       <aside
         className={cn(
           "fixed left-0 top-0 z-60 flex w-full items-center bg-[#d9d9d9] border-b border-[#26150f]",
-
-          // CORREÇÃO 1: 'justify-between' voltou!
-          // Isto empurra o Logo para a esquerda e o Botão para a direita no Mobile.
           "flex-row justify-between px-6 py-4",
-
-          // Desktop: Layout vertical
           "md:h-screen md:w-[100px] md:flex-col md:border-b-0 md:border-r md:py-10 md:px-0 md:justify-between md:gap-0"
         )}
       >
@@ -145,8 +153,7 @@ export function Navbar() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: "-100%" }}
             transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-            // z-[50]: Abaixo da barra
-            className="fixed inset-0 z-50 bg-[#d9d9d9] flex flex-col px-6 md:hidden"
+            className="fixed inset-0 z-50 bg-[#d9d9d9] flex flex-col px-6 md:hidden touch-none"
           >
             <nav className="flex flex-col gap-8 items-end pt-32 h-full">
               {navItems.map((item, index) => (
