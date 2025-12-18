@@ -44,16 +44,31 @@ export function Navbar() {
     document.body.style.overflow = "";
     lenis?.start();
 
+    // LÓGICA DE TOPO ABSOLUTO:
+    // Se o link for '#hero', vamos para o pixel 0.
+    // Se for outra secção, vamos para o ID com o offset.
+    const target = href === "#hero" ? 0 : href;
+    const offset = href === "#hero" ? 0 : -100;
+
     setTimeout(() => {
       if (lenis) {
-        lenis.scrollTo(href, {
+        lenis.scrollTo(target, {
           duration: 1.5,
-          offset: 0,
+          offset: offset,
         });
       } else {
-        const target = document.querySelector(href);
-        if (target) {
-          target.scrollIntoView({ behavior: "smooth" });
+        if (typeof target === "number") {
+          window.scrollTo({ top: target, behavior: "smooth" });
+        } else {
+          const element = document.querySelector(target);
+          if (element) {
+            const elementPosition =
+              element.getBoundingClientRect().top + window.scrollY;
+            window.scrollTo({
+              top: elementPosition + offset,
+              behavior: "smooth",
+            });
+          }
         }
       }
     }, 10);

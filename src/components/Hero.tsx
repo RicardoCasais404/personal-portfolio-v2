@@ -10,7 +10,7 @@ const containerVariants: Variants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    transition: { staggerChildren: 0.15, delayChildren: 0.1 },
+    transition: { staggerChildren: 0.1, delayChildren: 0.1 },
   },
 };
 
@@ -38,8 +38,6 @@ export function Hero() {
   const { scrollY } = useScroll();
 
   const y = useTransform(scrollY, [0, 500], [0, 100]);
-
-  // Fade out rápido no mobile
   const opacity = useTransform(scrollY, [0, 300], [1, 0]);
 
   return (
@@ -48,34 +46,35 @@ export function Hero() {
       ref={containerRef}
       className="relative flex min-h-screen w-full items-center px-6 pt-20 md:px-12 md:pt-0"
     >
-      {/*
-         MÁSCARA MOBILE AJUSTADA:
-         black_85%: A transparência começa mais tarde (nos últimos 15%).
-         Isto, combinado com o padding abaixo, salva a tagline.
-      */}
-      <div className="w-full max-w-[1200px] mx-auto mask-[linear-gradient(to_bottom,black_85%,transparent_100%)] md:mask-[linear-gradient(to_bottom,black_95%,transparent_100%)]">
+      <div className="w-full max-w-[1200px] mx-auto mask-[linear-gradient(to_bottom,black_80%,transparent_100%)] md:mask-[linear-gradient(to_bottom,black_95%,transparent_100%)]">
         <motion.div
           initial="hidden"
           animate="visible"
           variants={containerVariants}
           style={{ y, opacity }}
-          // PADDING MOBILE AUMENTADO:
-          // pb-12 (48px): Empurra o texto para cima, tirando a tagline da zona de perigo do gradiente.
-          // md:pb-10: Mantém o desktop igual.
           className="flex flex-col items-start pb-12 md:pb-10"
         >
           {/*
-             TAMANHO DA FONTE MOBILE AJUSTADO:
-             text-[11.5vw]: Reduzi de 13vw.
-             Isto garante que "DEVELOPMENT" cabe na largura do iPhone/Android sem cortar.
+             TIPOGRAFIA:
+             - Mobile: text-[16vw] (Gigante para encher a altura).
+             - Desktop: text-[clamp...] (Original).
+             - Leading: leading-[0.85] (Mais apertado no mobile para juntar o bloco vertical).
           */}
-          <h1 className="flex flex-col items-start w-full text-[11.5vw] md:text-[clamp(2.2rem,10vw,8rem)] font-bold leading-[1.1] tracking-normal text-[#26150f]">
-            <div className="w-full">
-              <motion.div variants={slideVariants} className="block">
-                FULL-STACK
-              </motion.div>
+          <h1 className="flex flex-col items-start w-full text-[16vw] md:text-[clamp(2.2rem,10vw,8rem)] font-bold leading-[0.85] md:leading-[1.1] tracking-normal text-[#26150f]">
+            {/* GRUPO 1: FULL STACK */}
+            <div className="w-full flex flex-col md:flex-row md:items-center">
+              <motion.div variants={slideVariants}>FULL</motion.div>
+              {/* O hífen só aparece em desktop para recriar "FULL-STACK" */}
+              <motion.span
+                variants={slideVariants}
+                className="hidden md:inline"
+              >
+                -
+              </motion.span>
+              <motion.div variants={slideVariants}>STACK</motion.div>
             </div>
 
+            {/* GRUPO 2: DEVELOPMENT + ÍCONE */}
             <motion.div
               variants={slideVariants}
               className="flex items-center gap-[0.25em] w-full md:ml-[4%]"
@@ -103,18 +102,19 @@ export function Hero() {
               </motion.div>
             </motion.div>
 
-            <div className="w-full">
-              <motion.div variants={slideVariants} className="block">
-                & CREATIVE SOLUTIONS.
-              </motion.div>
+            {/* GRUPO 3: & CREATIVE SOLUTIONS */}
+            {/* Mobile: flex-col (vertical). Desktop: flex-row gap (horizontal). */}
+            <div className="w-full flex flex-col md:flex-row md:gap-[0.25em]">
+              <motion.div variants={slideVariants}>&</motion.div>
+              <motion.div variants={slideVariants}>CREATIVE</motion.div>
+              <motion.div variants={slideVariants}>SOLUTIONS.</motion.div>
             </div>
           </h1>
 
           <div className="mt-6 md:mt-8">
-            {/* Tagline ajustada proporcionalmente */}
             <motion.div
               variants={slideVariants}
-              className="text-[3.5vw] md:text-[clamp(1rem,3vw,1.5rem)] font-bold uppercase tracking-[-0.08em]"
+              className="text-[4vw] md:text-[clamp(1rem,3vw,1.5rem)] font-bold uppercase tracking-[-0.08em]"
             >
               <span className="font-light">RICARDO</span>CASAIS
               <span className="font-light">404</span>
