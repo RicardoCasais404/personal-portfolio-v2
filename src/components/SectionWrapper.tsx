@@ -41,7 +41,7 @@ export function SectionWrapper({
     <div className="relative w-full">
       <span
         id={id}
-        className="absolute -top-[90px] left-0 w-full h-1 pointer-events-none opacity-0"
+        className="absolute -top-[70px] left-0 w-full h-1 pointer-events-none opacity-0"
       />
 
       <motion.section
