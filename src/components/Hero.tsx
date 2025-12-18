@@ -44,17 +44,9 @@ export function Hero() {
     <section
       id="hero"
       ref={containerRef}
-      // CORREÇÃO CENTRAGEM:
-      // Removi 'pt-20'.
-      // Adicionei 'justify-center'.
-      // Agora o conteúdo fica verticalmente centrado no ecrã (min-h-screen).
-      className="relative flex min-h-screen w-full items-center justify-center px-6 md:px-12"
+      // CORREÇÃO PADDING: px-4 no mobile para ganhar espaço lateral.
+      className="relative flex min-h-screen w-full items-center justify-center px-4 md:px-12"
     >
-      {/*
-         CORREÇÃO MÁSCARA:
-         black_90%: Aumentei a área visível. O fade out começa mais tarde.
-         Isto evita que a tagline fique semi-transparente por defeito.
-      */}
       <div className="w-full max-w-[1200px] mx-auto mask-[linear-gradient(to_bottom,black_90%,transparent_100%)] md:mask-[linear-gradient(to_bottom,black_95%,transparent_100%)]">
         <motion.div
           initial="hidden"
@@ -64,12 +56,10 @@ export function Hero() {
           className="flex flex-col items-start pb-12 md:pb-10"
         >
           {/*
-             CORREÇÃO TAMANHO:
-             Reduzi de 16vw para 12vw.
-             "DEVELOPMENT" e "SOLUTIONS" agora cabem sem cortar nas laterais.
+             CORREÇÃO TAMANHO: text-[10vw].
+             Isto garante que "DEVELOPMENT" + ÍCONE cabem numa linha sem cortar a última letra.
           */}
-          <h1 className="flex flex-col items-start w-full text-[12vw] md:text-[clamp(2.2rem,10vw,8rem)] font-bold leading-[0.85] md:leading-[1.1] tracking-normal text-[#26150f]">
-            {/* GRUPO 1: FULL STACK */}
+          <h1 className="flex flex-col items-start w-full text-[10vw] md:text-[clamp(2.2rem,10vw,8rem)] font-bold leading-[0.85] md:leading-[1.1] tracking-normal text-[#26150f]">
             <div className="w-full flex flex-col md:flex-row md:items-center">
               <motion.div variants={slideVariants}>FULL</motion.div>
               <motion.span
@@ -81,7 +71,6 @@ export function Hero() {
               <motion.div variants={slideVariants}>STACK</motion.div>
             </div>
 
-            {/* GRUPO 2: DEVELOPMENT + ÍCONE */}
             <motion.div
               variants={slideVariants}
               className="flex items-center gap-[0.25em] w-full md:ml-[4%]"
@@ -109,7 +98,6 @@ export function Hero() {
               </motion.div>
             </motion.div>
 
-            {/* GRUPO 3: & CREATIVE SOLUTIONS */}
             <div className="w-full flex flex-col md:flex-row md:gap-[0.25em]">
               <motion.div variants={slideVariants}>&</motion.div>
               <motion.div variants={slideVariants}>CREATIVE</motion.div>
@@ -118,7 +106,6 @@ export function Hero() {
           </h1>
 
           <div className="mt-6 md:mt-8">
-            {/* Tagline ajustada: 4vw é legível e proporcional */}
             <motion.div
               variants={slideVariants}
               className="text-[4vw] md:text-[clamp(1rem,3vw,1.5rem)] font-bold uppercase tracking-[-0.08em]"
