@@ -127,10 +127,10 @@ export const projectsData = {
     {
       title: "LUMINA",
       description:
-        "Lumina is a minimalist e-commerce case study for luxury lighting, engineered for speed and aesthetics.",
+        "A mockup online store built to explore high-end web design principles. Key features include a custom off-canvas mobile navigation, dynamic product filtering, and smooth micro-interactions. The goal was to combine a premium aesthetic with maximum accessibility and instant load times.",
       tags: ["React", "Next.js", "Tailwind", "Framer Motion", "Zustand"],
       link: "https://lumina-seven-phi.vercel.app/",
-      image: "/projects/lumina.png",
+      image: "public/projects/lumina.png",
     },
     {
       title: "Project Title 2",
