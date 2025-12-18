@@ -11,12 +11,6 @@ export default function Home() {
     <main className="flex min-h-screen flex-col items-center justify-between bg-[#d9d9d9]">
       {/* 1. HERO */}
       <Hero />
-
-      {/*
-         CONTAINER DE SECÇÕES
-         Sem 'gap'. O espaçamento é gerido pelo padding interno de cada secção
-         (py-20 no mobile, py-32 no desktop) e pelo min-h-screen.
-      */}
       <div className="w-full flex flex-col">
         {/* 2. ABOUT */}
         <About />

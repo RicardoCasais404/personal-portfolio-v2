@@ -48,9 +48,7 @@ export function Navbar() {
       if (lenis) {
         lenis.scrollTo(href, {
           duration: 1.5,
-          // CORREÇÃO: -120px.
-          // Sincronizado com o scroll-padding-top do CSS.
-          offset: -120,
+          offset: 0,
         });
       } else {
         const target = document.querySelector(href);

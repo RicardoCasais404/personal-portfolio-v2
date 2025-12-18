@@ -11,7 +11,7 @@ export function Education() {
     <SectionWrapper
       id="education"
       enableY={false}
-      className="relative w-full min-h-screen py-20 px-6 md:px-12 md:py-32 bg-[#d9d9d9]"
+      className="relative w-full min-h-screen py-20 px-6 md:px-12 bg-[#d9d9d9]"
     >
       <div className="w-full max-w-[1200px] mx-auto">
         {/* TÍTULO */}

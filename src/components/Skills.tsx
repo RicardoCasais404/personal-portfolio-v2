@@ -34,7 +34,7 @@ export function Skills() {
   return (
     <SectionWrapper
       id="skills"
-      className="relative w-full min-h-screen py-20 px-6 md:px-12 md:py-32 bg-[#d9d9d9] flex flex-col justify-center items-center"
+      className="relative w-full min-h-screen py-20 px-6 md:px-12 bg-[#d9d9d9] flex flex-col justify-start items-center"
     >
       <div className="w-full max-w-[1200px] mx-auto text-center">
         <h2 className="mb-12 md:mb-20 text-[clamp(2.5rem,8vw,5rem)] font-extrabold uppercase leading-[0.9] tracking-normal text-[#26150f]">

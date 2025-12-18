@@ -8,9 +8,7 @@ export function Projects() {
   return (
     <SectionWrapper
       id="projects"
-      // PADRONIZAÇÃO: py-32.
-      // justify-center: Centra o conteúdo no ecrã. Como temos py-32, o título nunca bate no topo.
-      className="relative w-full min-h-screen py-20 px-6 md:px-12 bg-[#d9d9d9] flex flex-col justify-center"
+      className="relative w-full min-h-screen py-20 px-6 md:px-12 bg-[#d9d9d9] flex flex-col justify-start"
     >
       <div className="w-full max-w-[1200px] mx-auto">
         <h2 className="mb-12 md:mb-32 text-center text-[clamp(2.5rem,8vw,5rem)] font-extrabold uppercase leading-[0.9] tracking-normal text-[#26150f]">

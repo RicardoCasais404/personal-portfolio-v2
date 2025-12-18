@@ -29,8 +29,7 @@ export function Contact() {
   return (
     <SectionWrapper
       id="contact"
-      // PADRONIZAÇÃO: py-32
-      className="relative w-full min-h-[80vh] py-20 px-6 md:px-12 bg-[#d9d9d9] flex flex-col justify-center"
+      className="relative w-full min-h-[80vh] py-20 px-6 md:px-12 bg-[#d9d9d9] flex flex-col justify-start"
     >
       <div className="w-full max-w-[1200px] mx-auto">
         <div className="flex flex-col md:flex-row gap-16 md:gap-24">

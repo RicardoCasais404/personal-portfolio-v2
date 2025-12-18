@@ -24,24 +24,44 @@ export function SectionWrapper({
     offset: ["start end", "end start"],
   });
 
-  const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0]);
+  // Animações suaves
+  const opacity = useTransform(
+    scrollYProgress,
+    [0, 0.15, 0.85, 1],
+    [0, 1, 1, 0]
+  );
   const scale = useTransform(
     scrollYProgress,
-    [0, 0.2, 0.8, 1],
+    [0, 0.15, 0.85, 1],
     [0.95, 1, 1, 0.95]
   );
   const yValue = enableY ? [100, 0, 0, -100] : [0, 0, 0, 0];
-  const y = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], yValue);
+  const y = useTransform(scrollYProgress, [0, 0.15, 0.85, 1], yValue);
 
   return (
-    <motion.section
-      ref={containerRef}
-      style={{ opacity, scale, y }}
-      className={cn("w-full relative", className)}
-    >
-      <span id={id} className="absolute top-0 invisible" />
+    // WRAPPER RELATIVO (Para posicionar a âncora)
+    <div className="relative w-full">
+      {/*
+         A ÂNCORA FÍSICA
+         - absolute: Sai do fluxo.
+         - top-[-130px]: Posiciona-se 130px ACIMA do início da secção.
+           (80px Navbar + 50px Margem Visual)
+         - id={id}: É para aqui que o link aponta.
+      */}
+      <span
+        id={id}
+        className="absolute -top-[130px] left-0 w-full h-1 pointer-events-none opacity-0"
+      />
 
-      {children}
-    </motion.section>
+      {/* A SECÇÃO VISÍVEL */}
+      <motion.section
+        ref={containerRef}
+        style={{ opacity, scale, y }}
+        // Passamos as classes do pai para aqui
+        className={cn("w-full", className)}
+      >
+        {children}
+      </motion.section>
+    </div>
   );
 }
