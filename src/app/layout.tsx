@@ -5,6 +5,7 @@ import { Navbar } from "@/components/Navbar";
 import { cn } from "@/lib/utils";
 import { SmoothScrollProvider } from "@/components/SmoothScroll";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { Analytics } from "@vercel/analytics/next";
 
 const myFont = localFont({
   src: "../fonts/font.ttf",
@@ -38,6 +39,7 @@ export default function RootLayout({
           <div className="pt-20 md:pl-[100px] md:pt-0">{children}</div>
         </SmoothScrollProvider>
         <SpeedInsights />
+        <Analytics />
       </body>
     </html>
   );
